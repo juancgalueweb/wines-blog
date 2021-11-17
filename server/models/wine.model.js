@@ -48,10 +48,9 @@ const WineSchema = new Schema({
     type: Number,
     required: [true, "Debe indicar el costo de la botella de vino"],
   },
-  // imageURL: {
-  //   type: String,
-  //   required: [true, "El vino requiere una URL para su imagen"],
-  // },
+  imageUrl: {
+    type: String,
+  },
   author: {
     type: Schema.Types.ObjectId,
     ref: "UserModel",

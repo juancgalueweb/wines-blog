@@ -252,6 +252,19 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
       </Form.Item>
 
       <Form.Item
+        label="Img url del vino"
+        name="imageUrl"
+        rules={[
+          {
+            type: "url",
+            message: "Por favor, ingrese una URL válida",
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
         wrapperCol={{
           span: 12,
           offset: 6,

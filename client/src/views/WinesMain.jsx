@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import "antd/dist/antd.css";
-import { Table, Modal } from "antd";
+import { Table, Modal, Image } from "antd";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button, Rate } from "antd";
 import { axiosWithoutToken, axiosWithToken } from "../helpers/axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import noImage from "../images/no-image.png";
 
 export const WinesMain = () => {
   const [wines, setWines] = useState([]);
@@ -186,6 +187,14 @@ export const WinesMain = () => {
     },
     {
       key: "11",
+      title: "Img",
+      dataIndex: "imageUrl",
+      render: (record) => {
+        return <Image width={30} src={!record ? noImage : record} />;
+      },
+    },
+    {
+      key: "12",
       title: "Acciones",
       render: (record) => {
         return (

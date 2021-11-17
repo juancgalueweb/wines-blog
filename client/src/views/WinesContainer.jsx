@@ -6,7 +6,6 @@ import { Button } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { WineForm } from "../components/WineForm";
-// import axios from "axios";
 import Swal from "sweetalert2";
 import { axiosWithoutToken, axiosWithToken } from "../helpers/axios";
 
@@ -22,9 +21,9 @@ export const WinesContainer = () => {
     classification: "",
     rating: "",
     price: "",
+    imageUrl: "",
   };
 
-  // const baseUrl = process.env.REACT_APP_API_URL;
   const history = useHistory();
   const [loaded, setLoaded] = useState(false);
   const { user, setUser } = useContext(UserContext);
@@ -34,7 +33,6 @@ export const WinesContainer = () => {
   const getWineById = async () => {
     try {
       const wine = await axiosWithToken(`wine/${id}`);
-      // const wine = await axios.get(`${baseUrl}/wine/${id}`);
       console.log("Data del vino de axios", wine.data);
       setInitialData(wine.data);
       setLoaded(true);
@@ -46,10 +44,6 @@ export const WinesContainer = () => {
   const newWine = async (values) => {
     try {
       await axiosWithToken("wine/new", { ...values, author: user._id }, "POST");
-      // await axios.post(`${baseUrl}/wine/new`, {
-      //   ...values,
-      //   author: user._id,
-      // });
       Swal.fire({
         icon: "success",
         title: "Vino registrado con éxito",
@@ -73,7 +67,6 @@ export const WinesContainer = () => {
   const updateWine = async (values) => {
     try {
       const response = await axiosWithToken(`wine/${id}`, values, "PUT");
-      // const response = await axios.put(`${baseUrl}/wine/${id}`, values);
       console.log("Respuesta al actualizar vino", response);
       Swal.fire({
         icon: "success",
@@ -106,7 +99,6 @@ export const WinesContainer = () => {
     try {
       console.log("Sesión cerrada!");
       await axiosWithoutToken("auth/logout", {}, "POST");
-      // await axios.post(`${baseUrl}/auth/logout`);
     } catch (err) {
       console.log("Error al hacer logout", err);
     }
