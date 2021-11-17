@@ -7,7 +7,7 @@ const WineSchema = new Schema({
     required: [true, "El vino debe tener una marca"],
   },
   bottleCapacity: {
-    type: String,
+    type: Number,
     required: [true, "Se debe especificar la capacidad de la botella en ml"],
   },
   origin: {
@@ -48,6 +48,10 @@ const WineSchema = new Schema({
     type: Number,
     required: [true, "Debe indicar el costo de la botella de vino"],
   },
+  // imageURL: {
+  //   type: String,
+  //   required: [true, "El vino requiere una URL para su imagen"],
+  // },
   author: {
     type: Schema.Types.ObjectId,
     ref: "UserModel",

@@ -1,7 +1,5 @@
-/* eslint-disable no-template-curly-in-string */
-import React, { useState } from "react";
-import { Form, Select, InputNumber, Button, Upload, Rate, Input } from "antd";
-import { UploadOutlined, InboxOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Form, Select, InputNumber, Button, Rate, Input } from "antd";
 
 const { Option } = Select;
 const formItemLayout = {
@@ -12,22 +10,13 @@ const formItemLayout = {
     span: 14,
   },
 };
-const normFile = (e) => {
-  console.log("Upload event:", e);
-
-  if (Array.isArray(e)) {
-    return e;
-  }
-
-  return e && e.fileList;
-};
 
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 
 const winesOptions = {
-  rosado: [
+  Rosado: [
     "Cabernet Sauvignon",
     "Grenache",
     "Sangiovese",
@@ -38,7 +27,7 @@ const winesOptions = {
     "Tempranillo",
     "Cariñena",
   ],
-  tinto: [
+  Tinto: [
     "Cabernet Sauvignon",
     "Carmenere",
     "Merlot",
@@ -54,23 +43,57 @@ const winesOptions = {
     "Nebbiolo",
     "Carignan",
   ],
+  Blanco: [
+    "Chardonnay",
+    "Sauvignon Blanc",
+    "Pedro Ximénez",
+    "Moscatel",
+    "Torrontés",
+    "Pinot gris",
+    "Albariño",
+    "Verdejo",
+    "Riesling",
+    "Semillón",
+    "Gewürztraminer",
+  ],
+  Espumante: ["Chardonnay", "Pinot Noir", "Pinot Meunier"],
+  LateHarvest: [
+    "Riesling",
+    "Moscatel",
+    "Gewürztraminer",
+    "Sauvignon Blanc",
+    "Furmint",
+  ],
 };
 
 export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
-  const [list, setList] = useState();
-  // const [subList, setSubList] = useState();
+  const [list, setList] = useState("");
+  const [subList, setSubList] = useState("");
+
+  const [form] = Form.useForm();
 
   const handleChangeType = (value) => {
     setList(value);
+    setSubList("");
+    form.setFieldsValue({
+      variety: "",
+    });
     console.log(`Selected ${value}`);
   };
 
-  // const handleChangeVariety = (value) => {
-  //   setSubList(value);
-  // };
+  const handleChangeVariety = (value) => {
+    console.log("Valor variety", value);
+    setSubList(value);
+  };
+
+  useEffect(() => {
+    setList(initialValues.type);
+    setSubList(initialValues.variety);
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Form
+      form={form}
       name="validate_other"
       {...formItemLayout}
       onFinish={processSubmit}
@@ -83,7 +106,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
         rules={[
           {
             required: true,
-            message: "Por favor ingrese una marca de vino",
+            message: "Por favor, ingrese una marca de vino",
           },
         ]}
       >
@@ -104,11 +127,11 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
           <Option value="">
             Seleccione un tipo de vino, ej: tinto, rosado, blanco...
           </Option>
-          <Option value="rosado">Rosado</Option>
-          <Option value="tinto">Tinto</Option>
-          <Option value="blanco">Blanco</Option>
-          <Option value="espumante">Espumante</Option>
-          <Option value="late-harvest">Late Harvest</Option>
+          <Option value="Rosado">Rosado</Option>
+          <Option value="Tinto">Tinto</Option>
+          <Option value="Blanco">Blanco</Option>
+          <Option value="Espumante">Espumante</Option>
+          <Option value="LateHarvest">Late Harvest</Option>
         </Select>
       </Form.Item>
 
@@ -122,9 +145,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
           },
         ]}
       >
-        <Select
-        // onChange={handleChangeVariety}
-        >
+        <Select onChange={handleChangeVariety} value={subList}>
           <Option value="">Seleccione una cepa de vino...</Option>
           {winesOptions[list]?.map((cepa, index) => (
             <Option key={index} value={cepa}>
@@ -134,65 +155,100 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
         </Select>
       </Form.Item>
 
-      {/* <Form.Item
-        name="select-multiple"
-        label="Select[multiple]"
+      <Form.Item
+        label="Lugar de origen"
+        name="origin"
         rules={[
           {
             required: true,
-            message: "Please select your favourite colors!",
-            type: "array",
+            message: "Por favor, ingrese el origen del vino",
           },
         ]}
       >
-        <Select mode="multiple" placeholder="Please select favourite colors">
-          <Option value="red">Red</Option>
-          <Option value="green">Green</Option>
-          <Option value="blue">Blue</Option>
-        </Select>
-      </Form.Item> */}
-
-      <Form.Item label="InputNumber">
-        <Form.Item name="input-number" noStyle>
-          <InputNumber min={1} max={10} />
-        </Form.Item>
-        <span className="ant-form-text"> machines</span>
+        <Input placeholder="Valle de Colchagua, Chile" />
       </Form.Item>
-      <Form.Item name="rate" label="Rate">
-        <Rate />
+
+      <Form.Item label="Capacidad de la botella">
+        <Form.Item
+          name="bottleCapacity"
+          noStyle
+          rules={[
+            {
+              type: "number",
+              required: true,
+              message: "Por favor, ingrese capacidad de la botella en ml",
+            },
+          ]}
+        >
+          <InputNumber min={180} max={16000} />
+        </Form.Item>
+        <span className="ant-form-text"> ml</span>
+      </Form.Item>
+
+      <Form.Item label="Grados alcohólicos">
+        <Form.Item
+          name="alcoholicStrength"
+          noStyle
+          rules={[
+            {
+              type: "number",
+              required: true,
+              message: "Por favor, ingrese los grados alcohólicos del vino",
+            },
+          ]}
+        >
+          <InputNumber min={0} max={45} />
+        </Form.Item>
+        <span className="ant-form-text">°</span>
+      </Form.Item>
+
+      <Form.Item label="Año de la cosecha">
+        <Form.Item
+          name="year"
+          rules={[
+            {
+              type: "number",
+              required: true,
+              message: "Por favor, ingrese el año de la cosecha",
+            },
+          ]}
+        >
+          <InputNumber min={1950} max={2100} />
+        </Form.Item>
       </Form.Item>
 
       <Form.Item
-        name="upload"
-        label="Upload"
-        valuePropName="fileList"
-        getValueFromEvent={normFile}
-        extra="longgggggggggggggggggggggggggggggggggg"
+        label="Clasificación del vino"
+        name="classification"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, ingrese la clasificación del vino",
+          },
+        ]}
       >
-        <Upload name="logo" action="/upload.do" listType="picture">
-          <Button icon={<UploadOutlined />}>Click to upload</Button>
-        </Upload>
+        <Input placeholder="Reserva, Gran Reserva, Single Block..." />
       </Form.Item>
 
-      <Form.Item label="Dragger">
+      <Form.Item name="rating" label="Puntaje">
+        <Rate allowHalf />
+      </Form.Item>
+
+      <Form.Item label="Precio">
         <Form.Item
-          name="dragger"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
+          name="price"
           noStyle
+          rules={[
+            {
+              type: "number",
+              required: true,
+              message: "Por favor, ingrese el precio del vino",
+            },
+          ]}
         >
-          <Upload.Dragger name="files" action="/upload.do">
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag file to this area to upload
-            </p>
-            <p className="ant-upload-hint">
-              Support for a single or bulk upload.
-            </p>
-          </Upload.Dragger>
+          <InputNumber min={1000} />
         </Form.Item>
+        <span className="ant-form-text">CLP$</span>
       </Form.Item>
 
       <Form.Item

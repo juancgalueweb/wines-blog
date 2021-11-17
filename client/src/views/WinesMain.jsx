@@ -2,29 +2,28 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
-import Swal from "sweetalert2";
 import "antd/dist/antd.css";
-import { Table } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { Table, Modal } from "antd";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Button } from "antd";
+import { Button, Rate } from "antd";
 import { axiosWithoutToken, axiosWithToken } from "../helpers/axios";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 export const WinesMain = () => {
-  // const baseUrl = process.env.REACT_APP_API_URL;
   const [wines, setWines] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
   const history = useHistory();
 
   const getWinesByUser = async () => {
     try {
       const winesData = await axiosWithToken(`wines/${user._id}`);
-      // const winesData = await axios.get(`${baseUrl}/wines/${user._id}`);
-      setWines(winesData.data);
+      const result = winesData.data.map((row) => ({ ...row, key: row._id }));
+      setWines(result);
       setLoaded(true);
       console.log("Data de los vinos por usuario", winesData.data);
     } catch (err) {
@@ -33,22 +32,16 @@ export const WinesMain = () => {
   };
 
   //Borrar un vino
-  const deleteWine = async (wineId, wineBrand) => {
+  const deleteWine = async (record) => {
     try {
-      await Swal.fire({
-        title: `¿Seguro que quiere borrar el vino <strong>${wineBrand}</strong>?`,
-        showDenyButton: true,
-        denyButtonText: "Me arrepentí",
-        confirmButtonText: "Borrar",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire("¡Borrado!", "", "success");
-          axiosWithToken(`wine/delete/${wineId}`, {}, "DELETE");
-          // axios.delete(`${baseUrl}/wine/delete/${wineId}`);
-          setWines(wines.filter((wine) => wine._id !== wineId));
-        } else if (result.isDenied) {
-          Swal.fire("No se borrará", "", "info");
-        }
+      await Modal.confirm({
+        title: `Seguero que quiere borrar el ${record.brand}`,
+        okText: "Yes",
+        okType: "danger",
+        onOk: () => {
+          axiosWithToken(`wine/delete/${record._id}`, {}, "DELETE");
+          setWines(wines.filter((wine) => wine._id !== record._id));
+        },
       });
     } catch (err) {
       console.log(err);
@@ -71,103 +64,144 @@ export const WinesMain = () => {
     localStorage.clear();
     try {
       await axiosWithoutToken("auth/logout", {}, "POST");
-      // await axios.post(`${baseUrl}/auth/logout`);
     } catch (err) {
       console.log("Error al hacer logout", err);
     }
   };
 
+  //Función que recibe todos los vinos y devuelve un arreglo con los valores
+  //únicos de lo que deseamos filtrar en las columnas de la tabla
+  const uniqueArrayData = (array, fieldToFilter) => {
+    const setValues = new Set(array.map((ele) => ele[fieldToFilter]));
+    return Array.from(setValues);
+  };
+
+  const thousandSeparator = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
   //Definiendo las columnas de la tabla de Ant Design
   const columns = [
     {
+      key: "1",
       title: "Marca",
       dataIndex: "brand",
-      filters: [
-        {
-          text: wines.map((wine) => wine.brand),
-          value: wines.map((wine) => wine.brand),
-        },
-      ],
+      filters: uniqueArrayData(wines, "brand").map((brand) => ({
+        text: brand,
+        value: brand,
+      })),
       onFilter: (value, record) => record.brand.indexOf(value) === 0,
-      sorter: (a, b) => a.brand.length - b.brand.length,
-      sortDirections: ["ascend", "descend", "ascend"],
     },
     {
-      title: "Capacidad botella (ml)",
-      dataIndex: "bottleCapacity",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.bottleCapacity - b.bottleCapacity,
-    },
-    {
-      title: "Valle o lugar de origen",
-      dataIndex: "origin",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.origin - b.origin,
-    },
-    {
-      title: "Tipo de vino",
+      key: "2",
+      title: "Tipo",
       dataIndex: "type",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.type - b.type,
+      filters: uniqueArrayData(wines, "type").map((wineType) => ({
+        text: wineType,
+        value: wineType,
+      })),
+      onFilter: (value, record) => record.type.indexOf(value) === 0,
+      render: (record) => {
+        return <p>{record === "LateHarvest" ? "Late Harvest" : record}</p>;
+      },
     },
     {
+      key: "3",
       title: "Cepa",
       dataIndex: "variety",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.variety - b.variety,
+      filters: uniqueArrayData(wines, "variety").map((wineCepa) => ({
+        text: wineCepa,
+        value: wineCepa,
+      })),
+      onFilter: (value, record) => record.variety.indexOf(value) === 0,
     },
     {
-      title: "Grado alcohólico",
+      key: "4",
+      title: "Origen",
+      dataIndex: "origin",
+      filters: uniqueArrayData(wines, "origin").map((origin) => ({
+        text: origin,
+        value: origin,
+      })),
+      onFilter: (value, record) => record.origin.indexOf(value) === 0,
+    },
+    {
+      key: "5",
+      title: "Botella (ml)",
+      dataIndex: "bottleCapacity",
+      sorter: (a, b) => a.bottleCapacity - b.bottleCapacity,
+      render: (record) => {
+        return (
+          <span style={{ textAlign: "right", display: "block" }}>
+            {thousandSeparator(record)}
+          </span>
+        );
+      },
+    },
+    {
+      key: "6",
+      title: "alc.",
       dataIndex: "alcoholicStrength",
-      defaultSortOrder: "descend",
       sorter: (a, b) => a.alcoholicStrength - b.alcoholicStrength,
     },
     {
-      title: "Año de cosecha",
+      key: "7",
+      title: "Año",
       dataIndex: "year",
-      defaultSortOrder: "descend",
       sorter: (a, b) => a.year - b.year,
     },
     {
-      title: "Clasificación",
+      key: "8",
+      title: "Clasif.",
       dataIndex: "classification",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.classification - b.classification,
+      filters: uniqueArrayData(wines, "classification").map((classif) => ({
+        text: classif,
+        value: classif,
+      })),
+      onFilter: (value, record) => record.classification.indexOf(value) === 0,
     },
     {
+      key: "9",
       title: "Rating",
       dataIndex: "rating",
-      defaultSortOrder: "descend",
+      width: "15%",
+      align: "center",
       sorter: (a, b) => a.rating - b.rating,
+      render: (record) => {
+        return <Rate allowHalf disabled defaultValue={record} />;
+      },
     },
     {
-      title: "Precio",
+      key: "10",
+      title: "Precio (CLP)",
       dataIndex: "price",
-      defaultSortOrder: "descend",
       sorter: (a, b) => a.price - b.price,
+      render: (record) => {
+        return (
+          <span style={{ textAlign: "right", display: "block" }}>
+            {thousandSeparator(record)}
+          </span>
+        );
+      },
     },
     {
+      key: "11",
       title: "Acciones",
-      dataIndex: "actions",
-      render: () => {
-        return wines.map((wine) => (
+      render: (record) => {
+        return (
           <>
-            <FontAwesomeIcon
-              icon={faEdit}
-              size="lg"
-              className="text-success mx-2"
-              onClick={() => history.push(`/vino/${wine._id}`)}
+            <EditOutlined
+              style={{ color: "#F18F01" }}
+              onClick={() => history.push(`/vino/${record._id}`)}
             />
-            <FontAwesomeIcon
-              className="text-danger mx-2 delete-pointer"
-              icon={faTrashAlt}
-              size="lg"
+            <DeleteOutlined
+              style={{ color: "#E63F32", marginLeft: 6 }}
               onClick={() => {
-                deleteWine(wine._id, wine.brand);
+                deleteWine(record);
               }}
             />
           </>
-        ));
+        );
       },
     },
   ];
@@ -177,7 +211,10 @@ export const WinesMain = () => {
   };
 
   return (
-    <Container className="my-3 mx-auto bg-light shadow rounded px-4">
+    <Container
+      className="my-3 mx-auto bg-light shadow rounded px-4"
+      id="my-container"
+    >
       <Row>
         <Col>
           <p className="text-end">Hola, {user?.fullName}</p>
@@ -211,6 +248,14 @@ export const WinesMain = () => {
               columns={columns}
               dataSource={wines}
               onChange={tableOnChange}
+              pagination={{
+                current: page,
+                pageSize: pageSize,
+                onChange: (page, pageSize) => {
+                  setPage(page);
+                  setPageSize(pageSize);
+                },
+              }}
             />
           )}
         </Col>
