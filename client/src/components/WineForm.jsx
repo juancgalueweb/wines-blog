@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Select, InputNumber, Button, Rate, Input } from "antd";
+import { winesOptions } from "../data/winesOptions";
 
 const { Option } = Select;
 const formItemLayout = {
@@ -13,57 +14,6 @@ const formItemLayout = {
 
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
-};
-
-const winesOptions = {
-  Rosado: [
-    "Cabernet Sauvignon",
-    "Grenache",
-    "Sangiovese",
-    "Syrah",
-    "Pinot Noir",
-    "Zinfadel",
-    "Malbec",
-    "Tempranillo",
-    "Cariñena",
-  ],
-  Tinto: [
-    "Cabernet Sauvignon",
-    "Carmenere",
-    "Merlot",
-    "Syrah",
-    "Pinot Noir",
-    "Malbec",
-    "País",
-    "Tempranillo",
-    "Lambrusco",
-    "Sangiovese",
-    "Grenache",
-    "Bonarda",
-    "Nebbiolo",
-    "Carignan",
-  ],
-  Blanco: [
-    "Chardonnay",
-    "Sauvignon Blanc",
-    "Pedro Ximénez",
-    "Moscatel",
-    "Torrontés",
-    "Pinot gris",
-    "Albariño",
-    "Verdejo",
-    "Riesling",
-    "Semillón",
-    "Gewürztraminer",
-  ],
-  Espumante: ["Chardonnay", "Pinot Noir", "Pinot Meunier"],
-  LateHarvest: [
-    "Riesling",
-    "Moscatel",
-    "Gewürztraminer",
-    "Sauvignon Blanc",
-    "Furmint",
-  ],
 };
 
 export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
@@ -222,6 +172,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
         name="classification"
         rules={[
           {
+            type: "string",
             required: true,
             message: "Por favor, ingrese la clasificación del vino",
           },

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import "antd/dist/antd.css";
-import { Table, Modal, Image } from "antd";
+import { Table, Modal, Image, Badge } from "antd";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -11,13 +11,15 @@ import { Button, Rate } from "antd";
 import { axiosWithoutToken, axiosWithToken } from "../helpers/axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import noImage from "../images/no-image.png";
+import { thousandSeparator } from "../helpers/thousandSeparator";
+import { uniqueArrayData } from "../helpers/uniqueArrayData";
 
 export const WinesMain = () => {
   const [wines, setWines] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(8);
   const history = useHistory();
 
   const getWinesByUser = async () => {
@@ -33,20 +35,24 @@ export const WinesMain = () => {
   };
 
   //Borrar un vino
-  const deleteWine = async (record) => {
-    try {
-      await Modal.confirm({
-        title: `Seguero que quiere borrar el ${record.brand}`,
-        okText: "Yes",
-        okType: "danger",
-        onOk: () => {
-          axiosWithToken(`wine/delete/${record._id}`, {}, "DELETE");
-          setWines(wines.filter((wine) => wine._id !== record._id));
-        },
-      });
-    } catch (err) {
-      console.log(err);
-    }
+  const deleteWine = (record) => {
+    const executeDelete = async () => {
+      try {
+        await axiosWithToken(`wine/delete/${record._id}`, {}, "DELETE");
+        setWines(wines.filter((wine) => wine._id !== record._id));
+      } catch (err) {
+        console.log("Error al borrar", err);
+      }
+    };
+
+    Modal.confirm({
+      title: `¿Seguero que quiere borrar el vino ${record.brand} - ${record.type}?`,
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        executeDelete();
+      },
+    });
   };
 
   useEffect(() => {
@@ -68,17 +74,6 @@ export const WinesMain = () => {
     } catch (err) {
       console.log("Error al hacer logout", err);
     }
-  };
-
-  //Función que recibe todos los vinos y devuelve un arreglo con los valores
-  //únicos de lo que deseamos filtrar en las columnas de la tabla
-  const uniqueArrayData = (array, fieldToFilter) => {
-    const setValues = new Set(array.map((ele) => ele[fieldToFilter]));
-    return Array.from(setValues);
-  };
-
-  const thousandSeparator = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
   //Definiendo las columnas de la tabla de Ant Design
@@ -103,7 +98,11 @@ export const WinesMain = () => {
       })),
       onFilter: (value, record) => record.type.indexOf(value) === 0,
       render: (record) => {
-        return <p>{record === "LateHarvest" ? "Late Harvest" : record}</p>;
+        return (
+          <span style={{ textAlign: "center" }}>
+            {record === "LateHarvest" ? "Late Harvest" : record}
+          </span>
+        );
       },
     },
     {
@@ -190,7 +189,7 @@ export const WinesMain = () => {
       title: "Img",
       dataIndex: "imageUrl",
       render: (record) => {
-        return <Image width={30} src={!record ? noImage : record} />;
+        return <Image height={30} src={!record ? noImage : record} />;
       },
     },
     {
@@ -247,25 +246,36 @@ export const WinesMain = () => {
       </Row>
       <Row>
         <Col>
-          <h2 className="text-center">Mis vinos</h2>
+          <h2 className="text-center wine-color">Mis vinos</h2>
           {loaded && wines.length === 0 ? (
             <p className="text-center fs-4 wine-color">
               No hay vinos registrados. Anímese a registrar su primer vino 🍷👏🏼
             </p>
           ) : (
-            <Table
-              columns={columns}
-              dataSource={wines}
-              onChange={tableOnChange}
-              pagination={{
-                current: page,
-                pageSize: pageSize,
-                onChange: (page, pageSize) => {
-                  setPage(page);
-                  setPageSize(pageSize);
-                },
-              }}
-            />
+            <>
+              <div>
+                <p
+                  className="nice-red-color"
+                  style={{ display: "inline-block", marginRight: "7px" }}
+                >
+                  Total de vinos registrados
+                </p>
+                <Badge count={wines.length} />
+              </div>
+              <Table
+                columns={columns}
+                dataSource={wines}
+                onChange={tableOnChange}
+                pagination={{
+                  current: page,
+                  pageSize: pageSize,
+                  onChange: (page, pageSize) => {
+                    setPage(page);
+                    setPageSize(pageSize);
+                  },
+                }}
+              />
+            </>
           )}
         </Col>
       </Row>

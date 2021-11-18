@@ -49,7 +49,7 @@ export const Header = () => {
             </Nav.Link>
             <Nav.Link onClick={() => history.push("/mis-vinos")}>
               <FontAwesomeIcon icon={faWineGlassAlt} className="me-2" />
-              Registrar mi vino
+              Ver mis vinos
             </Nav.Link>
           </Nav>
           <Nav>

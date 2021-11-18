@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseUrl = process.env.REACT_APP_API_URL;
-console.log("Base URL", baseUrl);
+// console.log("Base URL", baseUrl);
 const KEY = "wines-app";
 
 export const axiosWithoutToken = (endpoint, data, method = "GET") => {

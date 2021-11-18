@@ -83,6 +83,12 @@ export const WinesContainer = () => {
   };
 
   useEffect(() => {
+    if (!user?._id) {
+      history.push("/login");
+    }
+  }, [user, history]);
+
+  useEffect(() => {
     const fetchData = async () => {
       if (id) {
         await getWineById();

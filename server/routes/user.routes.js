@@ -7,5 +7,5 @@ const {
 module.exports = (app) => {
   app.post("/api/auth/register", registerUser);
   app.post("/api/auth/login", loginUser);
-  app.post("/api/auth/logut", logout);
+  app.post("/api/auth/logout", logout);
 };
