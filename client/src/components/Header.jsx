@@ -30,7 +30,7 @@ export const Header = () => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand className="brand-text">
+        <Navbar.Brand id="brand-text">
           <img
             src={wineGlass}
             alt="Imagen de una copa de vino"
