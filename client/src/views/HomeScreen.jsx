@@ -52,7 +52,7 @@ export const HomeScreen = () => {
           />
         </div>
       </Carousel>
-      <h1 className="text-light text-center pt-3">Beneficios de tomar vino</h1>
+      <h1 className="text-dark text-center pt-3">Beneficios de tomar vino</h1>
       <div className="site-card-wrapper" style={{ margin: "20px" }}>
         <Row gutter={16}>
           <Col span={8}>

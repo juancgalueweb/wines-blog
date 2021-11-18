@@ -219,66 +219,70 @@ export const WinesMain = () => {
   };
 
   return (
-    <Container
-      className="my-3 mx-auto bg-light shadow rounded px-4"
-      id="my-container"
-    >
-      <Row>
-        <Col>
-          <p className="text-end">Hola, {user?.fullName}</p>
-          <Button
-            type="primary"
-            danger
-            className="float-end"
-            onClick={handleLogOut}
-          >
-            Cerrar sesión
-          </Button>
-          <br />
-          <Button
-            type="primary"
-            className="d-block"
-            onClick={() => history.push("/nuevo-vino")}
-          >
-            Registrar un vino
-          </Button>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <h2 className="text-center wine-color">Mis vinos</h2>
-          {loaded && wines.length === 0 ? (
-            <p className="text-center fs-4 wine-color">
-              No hay vinos registrados. Anímese a registrar su primer vino 🍷👏🏼
-            </p>
-          ) : (
-            <>
-              <div>
-                <p
-                  className="nice-red-color"
-                  style={{ display: "inline-block", marginRight: "7px" }}
-                >
-                  Total de vinos registrados
-                </p>
-                <Badge count={wines.length} />
-              </div>
-              <Table
-                columns={columns}
-                dataSource={wines}
-                onChange={tableOnChange}
-                pagination={{
-                  current: page,
-                  pageSize: pageSize,
-                  onChange: (page, pageSize) => {
-                    setPage(page);
-                    setPageSize(pageSize);
-                  },
-                }}
-              />
-            </>
-          )}
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <Container
+        className="my-3 mx-auto bg-light shadow rounded px-4 py-3"
+        id="my-container"
+      >
+        <Row>
+          <Col>
+            <p className="text-end">Hola, {user?.fullName}</p>
+            <Button
+              type="primary"
+              danger
+              className="float-end"
+              onClick={handleLogOut}
+            >
+              Cerrar sesión
+            </Button>
+            <br />
+            <Button
+              type="primary"
+              className="d-block"
+              onClick={() => history.push("/nuevo-vino")}
+            >
+              Registrar un vino
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <h2 className="text-center wine-color">Mis vinos</h2>
+            {loaded && wines.length === 0 ? (
+              <p className="text-center fs-4 wine-color">
+                No hay vinos registrados. Anímese a registrar su primer vino
+                🍷👏🏼
+              </p>
+            ) : (
+              <>
+                <div>
+                  <p
+                    className="nice-red-color"
+                    style={{ display: "inline-block", marginRight: "7px" }}
+                  >
+                    Total de vinos registrados
+                  </p>
+                  <Badge count={wines.length} />
+                </div>
+                <Table
+                  columns={columns}
+                  dataSource={wines}
+                  onChange={tableOnChange}
+                  pagination={{
+                    current: page,
+                    pageSize: pageSize,
+                    onChange: (page, pageSize) => {
+                      setPage(page);
+                      setPageSize(pageSize);
+                    },
+                  }}
+                />
+              </>
+            )}
+          </Col>
+        </Row>
+      </Container>
+      <br />
+    </>
   );
 };
