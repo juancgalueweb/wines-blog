@@ -68,7 +68,7 @@ export const WinesMain = () => {
     };
 
     Modal.confirm({
-      title: `¿Seguero que quiere borrar el vino ${record.brand} - ${record.type}?`,
+      title: `¿Seguero que quiere borrar el vino ${record.brand} ${record.type} ${record.variety}?`,
       okText: "Yes",
       okType: "danger",
       onOk: () => {

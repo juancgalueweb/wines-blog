@@ -7,16 +7,12 @@ import Container from "react-bootstrap/Container";
 // import { UserForm } from "../components/UserForm";
 import { UserContext } from "../contexts/UserContext";
 import { LoginContext } from "../contexts/LoginContext";
-import Swal from "sweetalert2";
-import { axiosWithoutToken } from "../helpers/axios";
 import { UserFormAntd } from "../components/UserFormAntd";
 import { Row, Col, Button } from "antd";
 
-const KEY = "wines-app";
-
 export const LoginRegisterScreen = () => {
   const { isLogin, setIsLogin } = useContext(LoginContext);
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const location = useLocation();
   const history = useHistory();
 
@@ -27,60 +23,6 @@ export const LoginRegisterScreen = () => {
     } else {
       setIsLogin(true);
       history.push("/login");
-    }
-  };
-
-  //Registro de usuario
-  const registerUser = async (values) => {
-    try {
-      const response = await axiosWithoutToken("auth/register", values, "POST");
-      console.log("Respuesta al registrar usuario", response);
-      Swal.fire({
-        icon: "success",
-        title: `<strong>${values.fullName}</strong> se registró exitosamente. Por favor, inicie sesión`,
-        showConfirmButton: true,
-        confirmButtonText: "Ok",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          setIsLogin(true);
-          history.push("/login");
-        }
-      });
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        html: `<ul class="swal-list">${err.response.data.map(
-          (error) => `<li>${error}</li>`
-        )}</ul>`,
-        confirmButtonText: "Lo arreglaré!",
-      });
-    }
-  };
-
-  //Login de usuario
-  const loginUser = async (values) => {
-    try {
-      const userData = await axiosWithoutToken("auth/login", values, "POST");
-      console.log("User from axios", userData.data);
-      setUser(userData.data);
-      localStorage.setItem(KEY, JSON.stringify(userData.data));
-      Swal.fire({
-        icon: "success",
-        title: "Inició de sesión exitosa!",
-        showConfirmButton: false,
-        timer: 2000,
-      });
-      setTimeout(() => {
-        history.push("/mis-vinos");
-      }, 2100);
-    } catch (err) {
-      console.log(err);
-      Swal.fire({
-        icon: "error",
-        title: "Oops... usario o contraseña incorrecta",
-        confirmButtonText: "Lo revisaré!",
-      });
     }
   };
 
@@ -102,7 +44,6 @@ export const LoginRegisterScreen = () => {
           )}
           <UserFormAntd
             isLogin={isLogin}
-            handleUserSubmit={isLogin ? loginUser : registerUser}
             titleSubmitButton={isLogin ? "Login" : "Registro"}
           />
           <Button onClick={handleOnClick} className="styled-button">

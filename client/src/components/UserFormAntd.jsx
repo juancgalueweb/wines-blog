@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { Form, Row, Col, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { LoginContext } from "../contexts/LoginContext";
+import { UserContext } from "../contexts/UserContext";
+import Swal from "sweetalert2";
+import { axiosWithoutToken } from "../helpers/axios";
 
 export const UserFormAntd = (props) => {
-  const { isLogin, handleUserSubmit, titleSubmitButton } = props;
+  const { titleSubmitButton } = props;
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -33,13 +38,74 @@ export const UserFormAntd = (props) => {
     },
   };
 
+  //Apis de registrar y login
+  const { isLogin, setIsLogin } = useContext(LoginContext);
+  const { setUser } = useContext(UserContext);
+  const history = useHistory();
+  const KEY = "wines-app";
+
+  //Registro de usuario
+  const registerUser = async (values) => {
+    try {
+      const response = await axiosWithoutToken("auth/register", values, "POST");
+      console.log("Respuesta al registrar usuario", response);
+      Swal.fire({
+        icon: "success",
+        title: `<strong>${values.fullName}</strong> se registró exitosamente. Por favor, inicie sesión`,
+        showConfirmButton: true,
+        confirmButtonText: "Ok",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setIsLogin(true);
+          history.push("/login");
+        }
+      });
+      form.resetFields();
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        html: `<ul class="swal-list">${err.response.data.map(
+          (error) => `<li>${error}</li>`
+        )}</ul>`,
+        confirmButtonText: "Lo arreglaré!",
+      });
+    }
+  };
+
+  //Login de usuario
+  const loginUser = async (values) => {
+    try {
+      const userData = await axiosWithoutToken("auth/login", values, "POST");
+      console.log("User from axios", userData.data);
+      setUser(userData.data);
+      localStorage.setItem(KEY, JSON.stringify(userData.data));
+      Swal.fire({
+        icon: "success",
+        title: "Inició de sesión exitosa!",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setTimeout(() => {
+        history.push("/mis-vinos");
+      }, 2100);
+    } catch (err) {
+      console.log(err);
+      Swal.fire({
+        icon: "error",
+        title: "Oops... usario o contraseña incorrecta",
+        confirmButtonText: "Lo revisaré!",
+      });
+    }
+  };
+
   return (
     <Row>
       <Col span={14} className="mx-auto pb-2 pt-4">
         <Form
           form={form}
           {...formItemLayout}
-          onFinish={handleUserSubmit}
+          onFinish={isLogin ? loginUser : registerUser}
           initialValues={{
             fullName: "",
             email: "",
