@@ -11,20 +11,16 @@ export const axiosWithoutToken = (endpoint, data, method = "GET") => {
 };
 
 export const axiosWithToken = (endpoint, data, method = "GET") => {
-  try {
-    const url = `${baseUrl}/${endpoint}`;
-    // console.log("URL env", url);
-    const token = JSON.parse(localStorage.getItem(KEY)).token || "";
-    return axios({
-      method,
-      url,
-      data,
-      headers: {
-        "Content-type": "application/json",
-        "x-token": token,
-      },
-    });
-  } catch (err) {
-    console.log("Gotcha", err);
-  }
+  const url = `${baseUrl}/${endpoint}`;
+  // console.log("URL env", url);
+  const token = JSON.parse(localStorage.getItem(KEY)).token || "";
+  return axios({
+    method,
+    url,
+    data,
+    headers: {
+      "Content-type": "application/json",
+      "x-token": token,
+    },
+  });
 };
