@@ -3,16 +3,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import "antd/dist/antd.css";
-import { Table, Modal, Image, Badge } from "antd";
+import { Table, Image, Badge, Button, Rate, Modal } from "antd";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Button, Rate } from "antd";
-import { axiosWithoutToken, axiosWithToken } from "../helpers/axios";
+import { axiosWithToken } from "../helpers/axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import noImage from "../images/no-image.png";
 import { thousandSeparator } from "../helpers/thousandSeparator";
 import { uniqueArrayData } from "../helpers/uniqueArrayData";
+import Swal from "sweetalert2";
 
 export const WinesMain = () => {
   const [wines, setWines] = useState([]);
@@ -30,7 +30,18 @@ export const WinesMain = () => {
       setLoaded(true);
       console.log("Data de los vinos por usuario", winesData.data);
     } catch (err) {
-      console.log("Error al consultar todos los vinos x usuario", err);
+      console.log("Error al consultar todos los vinos x usuario");
+      if (err.response.status === 401) {
+        Swal.fire({
+          icon: "error",
+          title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        setTimeout(() => {
+          handleLogOut();
+        }, 2100);
+      }
     }
   };
 
@@ -42,6 +53,17 @@ export const WinesMain = () => {
         setWines(wines.filter((wine) => wine._id !== record._id));
       } catch (err) {
         console.log("Error al borrar", err);
+        if (err.response.status === 401) {
+          Swal.fire({
+            icon: "error",
+            title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          setTimeout(() => {
+            handleLogOut();
+          }, 2100);
+        }
       }
     };
 
@@ -57,23 +79,28 @@ export const WinesMain = () => {
 
   useEffect(() => {
     console.log("Usario del contexto", user);
-    if (!user?._id) {
+    if (!user) {
       history.push("/login");
     }
   }, [user, history]);
 
   useEffect(() => {
-    getWinesByUser();
+    if (user) {
+      getWinesByUser();
+    } else {
+      return;
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleLogOut = async () => {
+  const handleLogOut = () => {
     setUser(null);
     localStorage.clear();
-    try {
-      await axiosWithoutToken("auth/logout", {}, "POST");
-    } catch (err) {
-      console.log("Error al hacer logout", err);
-    }
+    history.push("/login");
+    // try {
+    //   await axiosWithoutToken("auth/logout", {}, "POST");
+    // } catch (err) {
+    //   console.log("Error al hacer logout", err);
+    // }
   };
 
   //Definiendo las columnas de la tabla de Ant Design

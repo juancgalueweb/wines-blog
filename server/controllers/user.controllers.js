@@ -25,9 +25,11 @@ module.exports.loginUser = async (req, res) => {
     const validPassword = bcrypt.compareSync(req.body.password, user.password);
     if (validPassword) {
       const token = await genJWT(user._id, user.fullName, user.email);
-      return res
-        .cookie("usertoken", token, process.env.SECRET_KEY, { httpOnly: true })
-        .json({ _id: user._id, fullName: user.fullName, token: token });
+      return (
+        res
+          // .cookie("usertoken", token, process.env.SECRET_KEY, { httpOnly: true })
+          .json({ _id: user._id, fullName: user.fullName, token: token })
+      );
     } else {
       return res.status(401).json({ msg: "Contraseña incorrecta" });
     }
@@ -37,14 +39,14 @@ module.exports.loginUser = async (req, res) => {
 };
 
 //Método para cerrar sesión
-module.exports.logout = async (req, res) => {
-  try {
-    const user = await UserModel.findOne({ email: req.body.email });
-    if (user) {
-      res.clearCookie("usertoken");
-      return res.json(user);
-    }
-  } catch (err) {
-    return res.status(500).json({ msg: "Ha fallado el logout", err });
-  }
-};
+// module.exports.logout = async (req, res) => {
+//   try {
+//     const user = await UserModel.findOne({ email: req.body.email });
+//     if (user) {
+//       res.clearCookie("usertoken");
+//       return res.json(user);
+//     }
+//   } catch (err) {
+//     return res.status(500).json({ msg: "Ha fallado el logout", err });
+//   }
+// };

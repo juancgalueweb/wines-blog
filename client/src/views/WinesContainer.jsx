@@ -7,7 +7,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { WineForm } from "../components/WineForm";
 import Swal from "sweetalert2";
-import { axiosWithoutToken, axiosWithToken } from "../helpers/axios";
+import { axiosWithToken } from "../helpers/axios";
 
 export const WinesContainer = () => {
   const startingData = {
@@ -38,6 +38,17 @@ export const WinesContainer = () => {
       setLoaded(true);
     } catch (err) {
       console.log("Error al obtener un vino por su ID", err);
+      if (err.response.status === 401) {
+        Swal.fire({
+          icon: "error",
+          title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        setTimeout(() => {
+          handleLogOut();
+        }, 2100);
+      }
     }
   };
 
@@ -61,6 +72,17 @@ export const WinesContainer = () => {
         text: err.response.data.message,
         confirmButtonText: "Aceptar",
       });
+      if (err.response.status === 401) {
+        Swal.fire({
+          icon: "error",
+          title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        setTimeout(() => {
+          handleLogOut();
+        }, 2100);
+      }
     }
   };
 
@@ -79,6 +101,17 @@ export const WinesContainer = () => {
       }, 2100);
     } catch (err) {
       console.log("Error al modificar el vino", err);
+      if (err.response.status === 401) {
+        Swal.fire({
+          icon: "error",
+          title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        setTimeout(() => {
+          handleLogOut();
+        }, 2100);
+      }
     }
   };
 
@@ -99,15 +132,16 @@ export const WinesContainer = () => {
     fetchData();
   }, [id]); //eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleLogOut = async () => {
+  const handleLogOut = () => {
     setUser(null);
     localStorage.clear();
-    try {
-      console.log("Sesión cerrada!");
-      await axiosWithoutToken("auth/logout", {}, "POST");
-    } catch (err) {
-      console.log("Error al hacer logout", err);
-    }
+    history.push("/login");
+    // try {
+    //   console.log("Sesión cerrada!");
+    //   await axiosWithoutToken("auth/logout", {}, "POST");
+    // } catch (err) {
+    //   console.log("Error al hacer logout", err);
+    // }
   };
 
   return (

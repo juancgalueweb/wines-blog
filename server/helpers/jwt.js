@@ -6,7 +6,7 @@ module.exports.genJWT = (userId, fullName, email) => {
     jwt.sign(
       payload,
       process.env.SECRET_KEY,
-      { expiresIn: "2h" },
+      { expiresIn: "24h" },
       (err, token) => {
         if (err) {
           console.log(err);
