@@ -59,7 +59,7 @@ export const HomeScreen = () => {
             <Card
               title="Previene enfermedades cardíacas"
               bordered={false}
-              style={{ height: "220px" }}
+              style={{ minHeight: "fit-content" }}
             >
               Las propiedades del vino tinto para el corazón son unas de las más
               estudiadas por la comunidad científica y extendidas por todo el
@@ -73,7 +73,7 @@ export const HomeScreen = () => {
             <Card
               title="Ayuda a prevenir el colesterol"
               bordered={false}
-              style={{ height: "220px" }}
+              style={{ minHeight: "fit-content" }}
             >
               Como ya hemos comentado, esta bebida es muy rica en polifenoles
               como el resveratrol: un componente con alta concentración de
@@ -85,7 +85,7 @@ export const HomeScreen = () => {
             <Card
               title="Aumenta los niveles de Omega 3"
               bordered={false}
-              style={{ height: "220px" }}
+              style={{ minHeight: "fit-content" }}
             >
               Prestigiosos investigadores y universidades de todo el mundo están
               de acuerdo en que los consumidores habituales (y moderados) de
@@ -96,7 +96,7 @@ export const HomeScreen = () => {
           </Col>
         </Row>
       </div>
-      ,
+      <br />
     </>
   );
 };

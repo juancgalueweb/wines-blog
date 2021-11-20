@@ -193,6 +193,14 @@ export const WinesMain = () => {
       dataIndex: "rating",
       width: "15%",
       align: "center",
+      filters: uniqueArrayData(wines, "rating")
+        .sort((a, b) => b - a)
+        .map((rate) => ({
+          text: <Rate allowHalf disabled defaultValue={rate} />,
+          value: rate,
+        })),
+      onFilter: (value, record) =>
+        record.rating.toString().indexOf(value.toString()) === 0,
       sorter: (a, b) => a.rating - b.rating,
       render: (record) => {
         return <Rate allowHalf disabled defaultValue={record} />;
@@ -226,11 +234,11 @@ export const WinesMain = () => {
         return (
           <>
             <EditOutlined
-              style={{ color: "#F18F01" }}
+              style={{ color: "#F18F01", marginLeft: 5, fontSize: 18 }}
               onClick={() => history.push(`/vino/${record._id}`)}
             />
             <DeleteOutlined
-              style={{ color: "#E63F32", marginLeft: 6 }}
+              style={{ color: "#E63F32", marginLeft: 16, fontSize: 18 }}
               onClick={() => {
                 deleteWine(record);
               }}
@@ -247,6 +255,7 @@ export const WinesMain = () => {
 
   return (
     <>
+      {/* {console.log(uniqueArrayData(wines, "rating").sort((a, b) => a - b))} */}
       <Container
         className="my-3 mx-auto bg-light shadow rounded px-4 py-3"
         id="my-container"
@@ -296,6 +305,7 @@ export const WinesMain = () => {
                   dataSource={wines}
                   onChange={tableOnChange}
                   pagination={{
+                    showSizeChanger: true,
                     current: page,
                     pageSize: pageSize,
                     onChange: (page, pageSize) => {

@@ -199,9 +199,11 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
                 },
               ]}
             >
-              <InputNumber min={1000} />
+              <InputNumber min={1000} placeholder="1500.5" />
             </Form.Item>
-            <span className="ant-form-text">CLP$</span>
+            <span className="ant-form-text">
+              CLP$ (el decimal se indica con un punto)
+            </span>
           </Form.Item>
 
           <Form.Item
