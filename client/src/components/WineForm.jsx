@@ -43,7 +43,10 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
 
   return (
     <Row>
-      <Col span={14} className="border rounded bg-light mx-auto pb-2 pt-4">
+      <Col
+        span={14}
+        className="border rounded mx-auto pb-2 pt-4 light-background"
+      >
         <Form
           form={form}
           name="validate_other"

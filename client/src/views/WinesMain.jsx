@@ -257,7 +257,7 @@ export const WinesMain = () => {
     <>
       {/* {console.log(uniqueArrayData(wines, "rating").sort((a, b) => a - b))} */}
       <Container
-        className="my-3 mx-auto bg-light shadow rounded px-4 py-3"
+        className="my-3 mx-auto shadow rounded px-4 py-3"
         id="my-container"
       >
         <Row>
