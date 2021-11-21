@@ -6,6 +6,7 @@ import slice3 from "../images/carrusel3.jpg";
 import slice4 from "../images/carrusel4.jpg";
 import { Card, Col, Row } from "antd";
 import { Layout } from "antd";
+import { Footer } from "../components/Footer";
 
 const { Content } = Layout;
 
@@ -97,6 +98,7 @@ export const HomeScreen = () => {
         </Row>
       </div>
       <br />
+      <Footer />
     </>
   );
 };
