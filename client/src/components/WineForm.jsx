@@ -135,7 +135,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
                 },
               ]}
             >
-              <InputNumber min={180} max={16000} />
+              <InputNumber min={180} max={16000} placeholder="750" />
             </Form.Item>
             <span className="ant-form-text"> ml</span>
           </Form.Item>
@@ -152,7 +152,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
                 },
               ]}
             >
-              <InputNumber min={0} max={45} />
+              <InputNumber min={0} max={45} placeholder="14.5" />
             </Form.Item>
             <span className="ant-form-text">°</span>
           </Form.Item>
@@ -168,7 +168,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
                 },
               ]}
             >
-              <InputNumber min={1950} max={2100} />
+              <InputNumber min={1950} max={2100} placeholder="2020" />
             </Form.Item>
           </Form.Item>
 
@@ -202,11 +202,16 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
                 },
               ]}
             >
-              <InputNumber min={1000} placeholder="1500.5" />
+              <InputNumber
+                min={1000}
+                placeholder="4.990"
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                }
+                parser={(value) => value.replace(/\./g, "")}
+              />
             </Form.Item>
-            <span className="ant-form-text">
-              CLP$ (el decimal se indica con un punto)
-            </span>
+            <span className="ant-form-text">CLP$</span>
           </Form.Item>
 
           <Form.Item
