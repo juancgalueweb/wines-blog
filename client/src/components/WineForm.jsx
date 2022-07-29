@@ -186,7 +186,26 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
             <Input placeholder="Reserva, Gran Reserva, Single Block..." />
           </Form.Item>
 
-          <Form.Item name="rating" label="Puntaje">
+          <Form.Item
+            name="rating"
+            label="Puntaje"
+            rules={[
+              {
+                required: true,
+                message: "Debe indicar un puntaje",
+              },
+              {
+                validator: (_, value) => {
+                  if (value > 0) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("El puntaje no puede ser cero")
+                  );
+                },
+              },
+            ]}
+          >
             <Rate allowHalf />
           </Form.Item>
 

@@ -77,12 +77,12 @@ export const UserFormAntd = (props) => {
   const loginUser = async (values) => {
     try {
       const userData = await axiosWithoutToken("auth/login", values, "POST");
-      console.log("User from axios", userData.data);
       setUser(userData.data);
+      // console.log("User from axios", userData.data);
       localStorage.setItem(KEY, JSON.stringify(userData.data));
       Swal.fire({
         icon: "success",
-        title: "Inició de sesión exitosa!",
+        title: "Inicio de sesión exitoso!",
         showConfirmButton: false,
         timer: 2000,
       });
@@ -90,10 +90,10 @@ export const UserFormAntd = (props) => {
         history.push("/mis-vinos");
       }, 2100);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       Swal.fire({
         icon: "error",
-        title: "Oops... usario o contraseña incorrecta",
+        title: `${err.response.data.msg}`,
         confirmButtonText: "Lo revisaré!",
       });
     }

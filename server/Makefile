@@ -1,3 +1,3 @@
-build:
-	docker build -t wines-api-server .
+build-backend:
+	docker build . -t juancgalue/api-server
 	

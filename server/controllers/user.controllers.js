@@ -22,31 +22,23 @@ module.exports.registerUser = async (req, res) => {
 module.exports.loginUser = async (req, res) => {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(401).json({ success: false, msg: "Usuario no existe" });
+    }
     const validPassword = bcrypt.compareSync(req.body.password, user.password);
     if (validPassword) {
       const token = await genJWT(user._id, user.fullName, user.email);
-      return (
-        res
-          // .cookie("usertoken", token, process.env.SECRET_KEY, { httpOnly: true })
-          .json({ _id: user._id, fullName: user.fullName, token: token })
-      );
+      return res.json({
+        _id: user._id,
+        fullName: user.fullName,
+        token: token,
+      });
     } else {
-      return res.status(401).json({ msg: "Contraseña incorrecta" });
+      return res
+        .status(401)
+        .json({ success: false, msg: "Contraseña incorrecta" });
     }
   } catch (err) {
     res.status(403).json({ msg: "Credenciales inválidas", err });
   }
 };
-
-//Método para cerrar sesión
-// module.exports.logout = async (req, res) => {
-//   try {
-//     const user = await UserModel.findOne({ email: req.body.email });
-//     if (user) {
-//       res.clearCookie("usertoken");
-//       return res.json(user);
-//     }
-//   } catch (err) {
-//     return res.status(500).json({ msg: "Ha fallado el logout", err });
-//   }
-// };

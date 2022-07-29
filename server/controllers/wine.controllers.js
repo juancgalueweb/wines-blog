@@ -4,9 +4,9 @@ const WineModel = require("../models/wine.model");
 module.exports.addWine = async (req, res) => {
   try {
     const wine = await WineModel.create(req.body);
-    return res.json(wine);
+    return res.json({ msg: "Vino registrado con éxito", wine });
   } catch (err) {
-    res.status(500).json({ msg: "Algo salió mal", err });
+    res.status(500).json({ msg: "Error al crear el vino", err });
   }
 };
 
@@ -16,7 +16,9 @@ module.exports.getWinesByUser = async (req, res) => {
     const winesUser = await WineModel.find({ author: req.params.id });
     return res.json(winesUser);
   } catch (err) {
-    res.status(500).json({ msg: "Algo salió mal", err });
+    res
+      .status(500)
+      .json({ msg: "Error al obtener los vinos por el usuario", err });
   }
 };
 
@@ -26,7 +28,7 @@ module.exports.getWineById = async (req, res) => {
     const singleWine = await WineModel.findById({ _id: req.params.id });
     return res.json(singleWine);
   } catch (err) {
-    res.status(500).json({ msg: "Algo salió mal", err });
+    res.status(500).json({ msg: "Error al obtener el vino por su ID", err });
   }
 };
 
@@ -36,7 +38,7 @@ module.exports.deleteWineById = async (req, res) => {
     await WineModel.deleteOne({ _id: req.params.id });
     return res.json({ msg: "Vino borrado satisfactoriamente" });
   } catch (err) {
-    res.status(500).json({ msg: "Algo salió mal", err });
+    res.status(500).json({ msg: "Error al borrar el vino", err });
   }
 };
 
@@ -48,8 +50,8 @@ module.exports.updateWineById = async (req, res) => {
       req.body,
       { new: true, runValidators: true }
     );
-    return res.json(updatedWine);
+    return res.json({ msg: "Vino modificado exitosamente", updatedWine });
   } catch (err) {
-    res.status(500).json({ msg: "Algo salió mal", err });
+    res.status(500).json({ msg: "Error al editar el vino", err });
   }
 };
