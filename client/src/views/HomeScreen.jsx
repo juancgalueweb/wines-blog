@@ -79,7 +79,7 @@ export const HomeScreen = () => {
               Como ya hemos comentado, esta bebida es muy rica en polifenoles
               como el resveratrol: un componente con alta concentración de
               antioxidantes que evita la formación de coágulos y de
-              lipoproteínas de baja densidad (LDL o ‘colesterol malo’).
+              lipoproteínas de baja densidad (LDL o "colesterol malo").
             </Card>
           </Col>
           <Col span={8}>

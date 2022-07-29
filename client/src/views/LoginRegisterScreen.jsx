@@ -1,10 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import Container from "react-bootstrap/Container";
-// import Row from "react-bootstrap/Row";
-// import Col from "react-bootstrap/Col";
-// import Button from "react-bootstrap/Button";
-// import { UserForm } from "../components/UserForm";
 import { UserContext } from "../contexts/UserContext";
 import { LoginContext } from "../contexts/LoginContext";
 import { UserFormAntd } from "../components/UserFormAntd";

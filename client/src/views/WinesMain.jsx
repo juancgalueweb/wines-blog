@@ -1,4 +1,3 @@
-// import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
@@ -28,20 +27,18 @@ export const WinesMain = () => {
       const result = winesData.data.map((row) => ({ ...row, key: row._id }));
       setWines(result);
       setLoaded(true);
-      console.log("Data de los vinos por usuario", winesData.data);
+      // console.log("Data de los vinos por usuario", winesData.data);
     } catch (err) {
-      console.log("Error al consultar todos los vinos x usuario");
-      if (err.response.status === 401) {
-        Swal.fire({
-          icon: "error",
-          title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-        setTimeout(() => {
-          handleLogOut();
-        }, 2100);
-      }
+      // console.log("Error al consultar todos los vinos x usuario");
+      Swal.fire({
+        icon: "error",
+        title: `${err.response.data.msg}`,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setTimeout(() => {
+        handleLogOut();
+      }, 2100);
     }
   };
 
@@ -52,18 +49,16 @@ export const WinesMain = () => {
         await axiosWithToken(`wine/delete/${record._id}`, {}, "DELETE");
         setWines(wines.filter((wine) => wine._id !== record._id));
       } catch (err) {
-        console.log("Error al borrar", err);
-        if (err.response.status === 401) {
-          Swal.fire({
-            icon: "error",
-            title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
-            showConfirmButton: false,
-            timer: 2000,
-          });
-          setTimeout(() => {
-            handleLogOut();
-          }, 2100);
-        }
+        // console.log("Error al borrar", err);
+        Swal.fire({
+          icon: "error",
+          title: `${err.response.data.msg}`,
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        setTimeout(() => {
+          handleLogOut();
+        }, 2100);
       }
     };
 
@@ -78,7 +73,7 @@ export const WinesMain = () => {
   };
 
   useEffect(() => {
-    console.log("Usario del contexto", user);
+    // console.log("Usario del contexto", user);
     if (!user) {
       history.push("/login");
     }
@@ -96,11 +91,6 @@ export const WinesMain = () => {
     setUser(null);
     localStorage.clear();
     history.push("/login");
-    // try {
-    //   await axiosWithoutToken("auth/logout", {}, "POST");
-    // } catch (err) {
-    //   console.log("Error al hacer logout", err);
-    // }
   };
 
   //Definiendo las columnas de la tabla de Ant Design

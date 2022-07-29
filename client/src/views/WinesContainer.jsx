@@ -33,22 +33,20 @@ export const WinesContainer = () => {
   const getWineById = async () => {
     try {
       const wine = await axiosWithToken(`wine/${id}`);
-      console.log("Data del vino de axios", wine.data);
+      // console.log("Data del vino de axios", wine.data);
       setInitialData(wine.data);
       setLoaded(true);
     } catch (err) {
-      console.log("Error al obtener un vino por su ID", err);
-      if (err.response.status === 401) {
-        Swal.fire({
-          icon: "error",
-          title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-        setTimeout(() => {
-          handleLogOut();
-        }, 2100);
-      }
+      // console.log("Error al obtener un vino por su ID", err);
+      Swal.fire({
+        icon: "error",
+        title: `${err.response.data.msg}`,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setTimeout(() => {
+        handleLogOut();
+      }, 2100);
     }
   };
 
@@ -65,31 +63,30 @@ export const WinesContainer = () => {
         history.push("/mis-vinos");
       }, 2100);
     } catch (err) {
-      console.log(err.response.data.message);
+      // console.log(err.response.data.message);
       Swal.fire({
         icon: "error",
         title: "Error",
         text: err.response.data.message,
         confirmButtonText: "Aceptar",
       });
-      if (err.response.status === 401) {
-        Swal.fire({
-          icon: "error",
-          title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-        setTimeout(() => {
-          handleLogOut();
-        }, 2100);
-      }
+
+      Swal.fire({
+        icon: "error",
+        title: `${err.response.data.msg}`,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setTimeout(() => {
+        handleLogOut();
+      }, 2100);
     }
   };
 
   const updateWine = async (values) => {
     try {
-      const response = await axiosWithToken(`wine/${id}`, values, "PUT");
-      console.log("Respuesta al actualizar vino", response);
+      await axiosWithToken(`wine/${id}`, values, "PUT");
+      // console.log("Respuesta al actualizar vino", response);
       Swal.fire({
         icon: "success",
         title: "El vino fue modificado",
@@ -100,18 +97,17 @@ export const WinesContainer = () => {
         history.push("/mis-vinos");
       }, 2100);
     } catch (err) {
-      console.log("Error al modificar el vino", err);
-      if (err.response.status === 401) {
-        Swal.fire({
-          icon: "error",
-          title: "Su sesión ha expirado. Debe volver a iniciar sesión.",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-        setTimeout(() => {
-          handleLogOut();
-        }, 2100);
-      }
+      // console.log("Error al modificar el vino", err);
+
+      Swal.fire({
+        icon: "error",
+        title: `${err.response.data.msg}`,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setTimeout(() => {
+        handleLogOut();
+      }, 2100);
     }
   };
 
@@ -136,12 +132,6 @@ export const WinesContainer = () => {
     setUser(null);
     localStorage.clear();
     history.push("/login");
-    // try {
-    //   console.log("Sesión cerrada!");
-    //   await axiosWithoutToken("auth/logout", {}, "POST");
-    // } catch (err) {
-    //   console.log("Error al hacer logout", err);
-    // }
   };
 
   return (
