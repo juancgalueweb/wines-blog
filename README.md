@@ -39,7 +39,7 @@ Para usar este proyecto, simplemente has un clone del proyecto e instalando las 
 
 ### Prerequisites
 
-Debes usar la versión de NODE 16, particularmente usé la V16.13.0. No uses otras versiones porque no te funcionará la aplicación. Te sugiero instalar y usar NVM, un manejador de versiones de node.
+Debes usar la versión de NODE 16. No uses otras versiones porque no te funcionará la aplicación. Te sugiero instalar y usar NVM, un manejador de versiones de node.
 
 Deberás crear dos archivos de variables de enterno. En la raíz del proyecto, debes crear un `.env`, con la siguiente data:
 
@@ -55,7 +55,7 @@ En la carpeta `client`, debes crear un `.env.development`, con la siguiente data
 REACT_APP_API_URL=http://localhost:PORT/api
 ```
 
-En `PORT`, debes usar el mismo puerto definido en el `.env` de la carpeta raíz del proyecto.
+En `PORT`, debes usar el mismo puerto definido en el `.env` que debe ir en la carpeta server.
 
 ### Installing
 
@@ -65,13 +65,13 @@ Copia y pega lo siguiente en tu terminal. Asegúrate de que en tu terminal, est�
 https://github.com/juancgalueweb/wines-blog.git
 ```
 
-En la carpeta matriz del proyecto, recuerda instalar todas las dependencias, usando:
+En la carpeta `server` del proyecto, recuerda instalar todas las dependencias, usando:
 
 ```
 npm install
 ```
 
-Debes hacer esto en la carpeta matriz, y dentro de la carpeta `client`, ya que hay dos `package.json`.
+También recuerda instalar las dependencias dentro de la carpeta `client`.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
