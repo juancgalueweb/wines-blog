@@ -45,7 +45,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
     <Row>
       <Col
         span={14}
-        className="border rounded mx-auto pb-2 pt-4 light-background"
+        className="border rounded mx-auto pb-2 pt-4 light-background my-4"
       >
         <Form
           form={form}
