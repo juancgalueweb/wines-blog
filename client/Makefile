@@ -10,7 +10,7 @@ build-local-fe:
 
 build-production-fe:
 	docker build \
-	-t juancgalue/react-app-production:1.0-production \
-	--build-arg CADDYFILE=Caddyfile.production \
-	--build-arg BASE_URL=https://mywines.juancgalue-web.cl/api \
-	-f Dockerfile.production .
+		-t juancgalue/react-app-production:1.0-production \
+		--build-arg CADDYFILE=Caddyfile.production \
+		--build-arg BASE_URL=https://mywines.juancgalue-web.cl/api \
+		-f Dockerfile.production .
