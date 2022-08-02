@@ -1,5 +1,4 @@
 const express = require("express");
-// const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const app = express();
 
@@ -10,7 +9,8 @@ require("dotenv").config();
 require("./config/mongoose.config");
 
 //Using cors
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+// app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors());
 
 //Access POST method
 app.use(express.json());
@@ -21,6 +21,7 @@ require("./routes/user.routes")(app);
 require("./routes/wine.routes")(app);
 
 //Using the port
-app.listen(process.env.PORT, () =>
-  console.log(`CORS-enabled web server listening on port ${process.env.PORT}`)
+const PORT = 8000;
+app.listen(PORT, () =>
+  console.log(`CORS-enabled web server listening on port ${PORT}`)
 );

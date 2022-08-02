@@ -1,7 +1,7 @@
 version: "3"
 services:
   react-app:
-    image: juancgalue/react-app:1.0
+    image: juancgalue/react-app-dev:1.0
     build: ./client/
     stdin_open: true
     ports:
@@ -14,6 +14,7 @@ services:
   api-server:
     image: juancgalue/api-server:1.0
     build: ./server/
+    env_file: ./server/config/dev.env
     ports:
       - "8000:8000"
     networks:
