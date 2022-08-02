@@ -9,7 +9,6 @@ require("dotenv").config();
 require("./config/mongoose.config");
 
 //Using cors
-// app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(cors());
 
 //Access POST method
