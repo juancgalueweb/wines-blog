@@ -11,7 +11,7 @@ services:
   api-server:
     image: juancgalue/api-server:1.0
     restart: unless-stopped
-    env_file: ./server/config/${ENV}.env
+    env_file: ./server/config/.env.${ENV}
     ports:
       - "8000:8000"
     networks:
