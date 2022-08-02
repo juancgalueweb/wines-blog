@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// Esta ruta funciona
+// Esto lo usaba antes de implementar dot_env
 // const LOCAL_DB_URL = "mongodb://localhost/wine_blog_db";
 
 // Ruta para el contenedor de docker
