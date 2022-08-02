@@ -13,7 +13,6 @@ server/node_modules
 
 # misc
 .DS_Store
-server/.env
 client/.env.development
 client/.env.production
 server/config/.env.dev
