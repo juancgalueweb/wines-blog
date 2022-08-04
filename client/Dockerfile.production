@@ -4,6 +4,7 @@ FROM node:16-slim AS builder
 WORKDIR /usr/src/app
 
 COPY ./package.json ./
+COPY ./package-lock.json ./
 
 RUN npm install
 
@@ -15,7 +16,7 @@ ENV REACT_APP_BASE_URL=${BASE_URL}
 RUN npm run build
 
 # Second stage
-FROM caddy:2.5.2-alpine
+FROM caddy:2.1.1
 
 ARG CADDYFILE
 COPY ${CADDYFILE} /etc/caddy/Caddyfile

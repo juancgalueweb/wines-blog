@@ -14,7 +14,7 @@ services:
   api-server:
     image: juancgalue/api-server:1.0
     build: ./server/
-    env_file: ./server/config/dev.env
+    env_file: ./server/config/.env.dev
     ports:
       - "8000:8000"
     networks:
