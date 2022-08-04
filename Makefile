@@ -5,7 +5,7 @@ build-dev:
 run-dev:
 	docker-compose -f docker-compose-dev.yml up
 
-# Running the caddy web server and using the Mongo DB Atlas database
+# Production configuration
 build-local:
 	cd client && $(MAKE) build-local-fe
 	cd server && $(MAKE) build-be
