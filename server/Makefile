@@ -1,3 +1,3 @@
 build-be:
-	docker build . -t juancgalue/api-server:1.0
+	docker build -t api-server .
 	
