@@ -21,10 +21,12 @@ build-production:
 run-production:
 	ENV=production docker-compose -f docker-compose-production.yml up
 
+#Digital Ocean VM
 SSH_STRING:=root@142.93.53.152
 
 ssh:
 	ssh $(SSH_STRING)
 
+#Copy files from local to Digital Ocean VM
 copy-files:
 	scp -r ./* $(SSH_STRING):/root/
