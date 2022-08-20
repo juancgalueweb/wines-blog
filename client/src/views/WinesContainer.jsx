@@ -37,7 +37,7 @@ export const WinesContainer = () => {
       setInitialData(wine.data);
       setLoaded(true);
     } catch (err) {
-      // console.log("Error al obtener un vino por su ID", err);
+      console.log("Error al obtener un vino por su ID", err);
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -59,6 +59,7 @@ export const WinesContainer = () => {
   };
 
   const newWine = async (values) => {
+    console.log("Values after submitting: ", values);
     try {
       const answer = await axiosWithToken(
         "wine/new",
