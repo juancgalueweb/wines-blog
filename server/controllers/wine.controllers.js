@@ -1,5 +1,16 @@
 const WineModel = require("../models/wine.model");
 
+//Subir una imagen de vino
+module.exports.uploadFile = async (req, res) => {
+  const file = req.file;
+  console.log("File", file);
+  setTimeout(() => {
+    res
+      .status(200)
+      .json({ status: "success", msg: "Prueba exitosa de subir una foto" });
+  }, 3000);
+};
+
 //Crear una reseña de vino
 module.exports.addWine = async (req, res) => {
   try {

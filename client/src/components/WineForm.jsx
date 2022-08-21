@@ -43,11 +43,11 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
     form.setFieldsValue({
       variety: "",
     });
-    console.log(`Selected ${value}`);
+    // console.log(`Selected ${value}`);
   };
 
   const handleChangeVariety = (value) => {
-    console.log("Valor variety", value);
+    // console.log("Valor variety", value);
     setSubList(value);
   };
 
@@ -59,24 +59,36 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
     return e && e?.fileList;
   };
 
-  const handleUpload = () => {
-    const formData = new FormData();
-    fileList.forEach((file) => {
-      formData.append("files[]", file);
-    });
-    setUploading(true);
-    axiosWithTokenImageUpload("/image", formData, "POST")
-      .then((res) => res.json())
-      .then(() => {
-        setFileList([]);
-        message.success("Subida de data satisfactoria.");
-      })
-      .catch(() => {
-        message.error("Subida fallida.");
-      })
-      .finally(() => {
-        setUploading(false);
+  const handleUpload = async () => {
+    try {
+      const formData = new FormData();
+      fileList.forEach((file) => {
+        formData.append("file", file);
       });
+      setUploading(true);
+      const uploadResponse = await axiosWithTokenImageUpload(
+        "file",
+        formData,
+        "POST"
+      );
+      setFileList([]);
+      // console.log("Upload response", uploadResponse.data);
+      if (uploadResponse.data.status !== "success") {
+        message.error({
+          content: "Subida fallida",
+          duration: 5,
+          style: { marginTop: "10vh" },
+        });
+      }
+      message.success({
+        content: "Data subida satisfactoriamente",
+        duration: 5,
+        style: { marginTop: "10vh" },
+      });
+      setUploading(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const props = {
@@ -92,24 +104,8 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
     },
     fileList,
     name: "file",
-    // action: "https://localhost:8000/api/images",
-    accept: ".jpg, .png, .jpeg",
-    maxCount: 1,
-    listType: "picture",
-    // headers: {
-    //   authorization: "authorization-text",
-    // },
-
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+    headers: {
+      authorization: "authorization-text",
     },
   };
 
@@ -293,11 +289,8 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
               rules={[
                 {
                   type: "number",
-                  message: "Por favor, ingrese el precio del vino",
-                },
-                {
                   required: true,
-                  message: "Debe indicar un precio",
+                  message: "Por favor, ingrese el precio del vino",
                 },
               ]}
             >
@@ -314,12 +307,18 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
           </Form.Item>
 
           <Form.Item
-            name="imageUrl"
+            // name="imageUrl"
             label="Subir foto"
             getValueFromEvent={getFile}
           >
-            <Upload {...props}>
-              <Button icon={<UploadOutlined />}>Selecciona foto</Button>
+            <Upload
+              {...props}
+              accept=".jpg, .png, .jpeg"
+              maxCount={1}
+              listType="picture"
+              multiple={false}
+            >
+              <Button icon={<UploadOutlined />}>Seleccione 1 foto</Button>
             </Upload>
             <Button
               type="secondary"
@@ -331,19 +330,6 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
               {uploading ? "Subiendo" : "Iniciar la subida"}
             </Button>
           </Form.Item>
-
-          {/* <Form.Item
-            label="Img url del vino"
-            name="imageUrl"
-            rules={[
-              {
-                type: "url",
-                message: "Por favor, ingrese una URL válida",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item> */}
 
           <Form.Item
             wrapperCol={{
