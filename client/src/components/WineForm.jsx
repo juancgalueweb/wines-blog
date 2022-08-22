@@ -9,7 +9,7 @@ import {
   Row,
   Col,
   Upload,
-  message,
+  Alert,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { winesOptions } from "../data/winesOptions";
@@ -34,6 +34,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
   const [subList, setSubList] = useState("");
   const [fileList, setFileList] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
 
   const [form] = Form.useForm();
 
@@ -74,17 +75,9 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
       setFileList([]);
       // console.log("Upload response", uploadResponse.data);
       if (uploadResponse.data.status !== "success") {
-        message.error({
-          content: "Subida fallida",
-          duration: 5,
-          style: { marginTop: "10vh" },
-        });
+        setUploaded(false);
       }
-      message.success({
-        content: "Data subida satisfactoriamente",
-        duration: 5,
-        style: { marginTop: "10vh" },
-      });
+      setUploaded(true);
       setUploading(false);
     } catch (err) {
       console.log(err);
@@ -320,7 +313,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
             >
               <Button
                 icon={<UploadOutlined />}
-                disabled={fileList.length === 1}
+                disabled={fileList.length === 1 || uploaded}
               >
                 Seleccione 1 foto
               </Button>
@@ -334,6 +327,14 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
             >
               {uploading ? "Subiendo" : "Iniciar la subida"}
             </Button>
+            {uploaded && (
+              <Alert
+                message="Archivo subido con éxito"
+                type="success"
+                closable={false}
+                style={{ marginTop: 15 }}
+              ></Alert>
+            )}
           </Form.Item>
 
           <Form.Item
