@@ -318,7 +318,12 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
               listType="picture"
               multiple={false}
             >
-              <Button icon={<UploadOutlined />}>Seleccione 1 foto</Button>
+              <Button
+                icon={<UploadOutlined />}
+                disabled={fileList.length === 1}
+              >
+                Seleccione 1 foto
+              </Button>
             </Upload>
             <Button
               type="secondary"
