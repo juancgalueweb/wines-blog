@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 
 // Ruta para el contenedor de docker
 const DB_URL = process.env.MONGO_URI;
+// console.log("DB_URL: ", DB_URL);
 
 main().catch((err) => console.log(err));
 async function main() {

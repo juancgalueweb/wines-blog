@@ -1,14 +1,15 @@
 const WineModel = require("../models/wine.model");
+const { uploadFile } = require("../helpers/s3");
 
 //Subir una imagen de vino
 module.exports.uploadFile = async (req, res) => {
   const file = req.file;
   console.log("File", file);
-  setTimeout(() => {
-    res
-      .status(200)
-      .json({ status: "success", msg: "Prueba exitosa de subir una foto" });
-  }, 3000);
+  const s3Result = await uploadFile(file);
+  console.log("Respuesta de S3: ", s3Result);
+  return res
+    .status(200)
+    .json({ status: "success", msg: "Archivo subido con éxito!" });
 };
 
 //Crear una reseña de vino

@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 
 //Using dotenv
+// require("dotenv").config({ path: "./config/.env.dev" });
 require("dotenv").config();
 
 //Mongoose config

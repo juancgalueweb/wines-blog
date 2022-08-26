@@ -35,6 +35,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
   const [fileList, setFileList] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
+  const [uploadResponseMsg, setUploadResponseMsg] = useState("");
 
   const [form] = Form.useForm();
 
@@ -73,14 +74,12 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
         "POST"
       );
       setFileList([]);
-      // console.log("Upload response", uploadResponse.data);
-      if (uploadResponse.data.status !== "success") {
-        setUploaded(false);
-      }
       setUploaded(true);
+      setUploadResponseMsg(uploadResponse.data.msg);
       setUploading(false);
     } catch (err) {
-      console.log(err);
+      setUploaded(false);
+      setUploadResponseMsg(err.response.data.msg);
     }
   };
 
@@ -329,7 +328,8 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
             </Button>
             {uploaded && (
               <Alert
-                message="Archivo subido con éxito"
+                showIcon
+                message={uploadResponseMsg}
                 type="success"
                 closable={false}
                 style={{ marginTop: 15 }}

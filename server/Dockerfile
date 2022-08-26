@@ -1,4 +1,5 @@
-FROM node:16-slim
+# FROM node:16-slim
+FROM node:fermium-alpine3.15
 
 WORKDIR /usr/src/app
 
