@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { winesOptions } from "../data/winesOptions";
-import { axiosWithTokenImageUpload } from "../helpers/axios";
+import { axiosWithTokenImageUpload, axiosWithToken } from "../helpers/axios";
 
 const { Option } = Select;
 const formItemLayout = {
@@ -69,10 +69,11 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
       });
       setUploading(true);
       const uploadResponse = await axiosWithTokenImageUpload(
-        "file",
+        "uploadSingleFile",
         formData,
         "POST"
       );
+      console.log("Upload response: ", uploadResponse.data);
       setFileList([]);
       setUploaded(true);
       setUploadResponseMsg(uploadResponse.data.msg);
@@ -99,6 +100,13 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
     headers: {
       authorization: "authorization-text",
     },
+  };
+
+  const test = async () => {
+    const response = await axiosWithToken(
+      "getFile/1536925fac83c2b6da001fa636dbbaed"
+    );
+    console.log("Probando: ", response);
   };
 
   useEffect(() => {
@@ -348,6 +356,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
             </Button>
           </Form.Item>
         </Form>
+        <button onClick={test}>Probando</button>
       </Col>
     </Row>
   );

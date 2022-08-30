@@ -1,15 +1,55 @@
 const WineModel = require("../models/wine.model");
-const { uploadFile } = require("../helpers/s3");
+const { uploadFile, getObjectSignedUrl } = require("../helpers/s3");
+const fs = require("fs-extra");
+const util = require("util");
+const crypto = require("crypto");
+const sharp = require("sharp");
 
-//Subir una imagen de vino
-module.exports.uploadFile = async (req, res) => {
-  const file = req.file;
-  console.log("File", file);
-  const s3Result = await uploadFile(file);
-  console.log("Respuesta de S3: ", s3Result);
-  return res
-    .status(200)
-    .json({ status: "success", msg: "Archivo subido con éxito!" });
+const generateFileName = (bytes = 32) =>
+  crypto.randomBytes(bytes).toString("hex");
+
+const resizeImage = (file) => {
+  try {
+    sharp(file)
+      .resize({ width: 1920, height: 1080, fit: "contain" })
+      .toBuffer();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//Subir una imagen a AWS s3 bucket
+module.exports.uploadImage = async (req, res) => {
+  try {
+    const file = req.file;
+    const imageName = generateFileName();
+    const fileBuffer = resizeImage(file.buffer);
+    await uploadFile(fileBuffer, imageName, file.mimetype);
+    //Remueve imagen de la carpeta uploads de multer, una vez que se suba a AWS s3
+    const unlinkFile = util.promisify(fs.unlink);
+    await unlinkFile(file.path);
+    // console.log("Respuesta de S3: ", s3Result);
+    return res.status(200).json({
+      status: "success",
+      msg: "Archivo subido con éxito!",
+    });
+  } catch (err) {
+    res.status(500).json({ msg: "Error al subir el archivo", err });
+  }
+};
+
+//Encontrar imagen en el AWS s3 bucket
+module.exports.downloadImage = async (req, res) => {
+  try {
+    const key = req.params.key;
+    const readStream = getObjectSignedUrl(key);
+    readStream.pipe(res);
+    // console.log("RES", readStream);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ msg: "Error al buscar imagen por su key en el AWS s3" });
+  }
 };
 
 //Crear una reseña de vino

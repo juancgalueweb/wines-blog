@@ -7,7 +7,8 @@ const {
   getWineById,
   deleteWineById,
   updateWineById,
-  uploadFile,
+  uploadImage,
+  downloadImage,
 } = require("../controllers/wine.controllers");
 const { validateJWT } = require("../middlewares/validate-jwt");
 
@@ -17,5 +18,11 @@ module.exports = (app) => {
   app.get("/api/wine/:id", validateJWT, getWineById);
   app.delete("/api/wine/delete/:id", validateJWT, deleteWineById);
   app.put("/api/wine/:id", updateWineById);
-  app.post("/api/file", upload.single("file"), uploadFile); //pendiente validar con el token para subir una foto
+  app.post(
+    "/api/uploadSingleFile",
+    upload.single("file"),
+    validateJWT,
+    uploadImage
+  );
+  app.get("/api/getFile/:key", validateJWT, downloadImage);
 };
