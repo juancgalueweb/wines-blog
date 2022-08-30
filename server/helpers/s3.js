@@ -25,7 +25,6 @@ module.exports.uploadFile = (fileBuffer, fileName, mimetype) => {
     Key: fileName,
     contentType: mimetype,
   };
-  //TODO: S3.putObject only accepts streams that it can determine the length of
   return s3Client.send(new PutObjectCommand(uploadParms));
 };
 
