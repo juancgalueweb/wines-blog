@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { winesOptions } from "../data/winesOptions";
-import { axiosWithTokenImageUpload, axiosWithToken } from "../helpers/axios";
+import { axiosWithTokenImageUpload } from "../helpers/axios";
 
 const { Option } = Select;
 const formItemLayout = {
