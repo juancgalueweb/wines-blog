@@ -25,11 +25,12 @@ const formItemLayout = {
   },
 };
 
-// const onFinishFailed = (errorInfo) => {
-//   console.log("Failed:", errorInfo);
-// };
-
-export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
+export const WineForm = ({
+  processSubmit,
+  initialValues,
+  titleButton,
+  // imageName,
+}) => {
   const [list, setList] = useState("");
   const [subList, setSubList] = useState("");
   const [fileList, setFileList] = useState([]);
@@ -61,6 +62,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
     return e && e?.fileList;
   };
 
+  //TODO: pasar el imageName al contender padre para grabarlo en la base de datos al crear un vino
   const handleUpload = async () => {
     try {
       const formData = new FormData();
@@ -73,6 +75,7 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
         formData,
         "POST"
       );
+      // const imageName = uploadResponse.data.imageName;
       console.log("Upload response: ", uploadResponse.data);
       setFileList([]);
       setUploaded(true);
@@ -100,13 +103,6 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
     headers: {
       authorization: "authorization-text",
     },
-  };
-
-  const test = async () => {
-    const response = await axiosWithToken(
-      "getFile/1536925fac83c2b6da001fa636dbbaed"
-    );
-    console.log("Probando: ", response);
   };
 
   useEffect(() => {
@@ -356,7 +352,6 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
             </Button>
           </Form.Item>
         </Form>
-        <button onClick={test}>Probando</button>
       </Col>
     </Row>
   );
