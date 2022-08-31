@@ -29,6 +29,7 @@ export const WinesContainer = () => {
   const { user, setUser } = useContext(UserContext);
   const [initialData, setInitialData] = useState(startingData);
   const { id } = useParams();
+  const [s3ImageName, setS3ImageName] = useState("");
 
   const getWineById = async () => {
     try {
@@ -59,11 +60,11 @@ export const WinesContainer = () => {
   };
 
   const newWine = async (values) => {
-    console.log("Values after submitting: ", values);
+    // console.log("Values after submitting: ", values);
     try {
       const answer = await axiosWithToken(
         "wine/new",
-        { ...values, author: user._id },
+        { ...values, author: user._id, imageUrl: s3ImageName },
         "POST"
       );
       Swal.fire({
@@ -185,6 +186,7 @@ export const WinesContainer = () => {
               processSubmit={id !== undefined ? updateWine : newWine}
               initialValues={initialData}
               titleButton={id !== undefined ? "Actualizar" : "Crear"}
+              getImgName={(s3ImageName) => setS3ImageName(s3ImageName)}
             />
           ) : (
             <h1>Cargando...</h1>

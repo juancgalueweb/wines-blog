@@ -29,7 +29,7 @@ export const WineForm = ({
   processSubmit,
   initialValues,
   titleButton,
-  // imageName,
+  getImgName,
 }) => {
   const [list, setList] = useState("");
   const [subList, setSubList] = useState("");
@@ -75,8 +75,8 @@ export const WineForm = ({
         formData,
         "POST"
       );
-      // const imageName = uploadResponse.data.imageName;
-      console.log("Upload response: ", uploadResponse.data);
+      getImgName(uploadResponse.data.imageName);
+      // console.log("Upload response: ", uploadResponse.data);
       setFileList([]);
       setUploaded(true);
       setUploadResponseMsg(uploadResponse.data.msg);
