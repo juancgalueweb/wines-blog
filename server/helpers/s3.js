@@ -36,7 +36,7 @@ module.exports.getObjectSignedUrl = async (key) => {
   };
 
   const command = new GetObjectCommand(params);
-  const seconds = 60;
+  const seconds = 172800; //2 días en segundos
   const url = await getSignedUrl(s3Client, command, { expiresIn: seconds });
   return url;
 };

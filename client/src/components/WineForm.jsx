@@ -62,7 +62,6 @@ export const WineForm = ({
     return e && e?.fileList;
   };
 
-  //TODO: pasar el imageName al contender padre para grabarlo en la base de datos al crear un vino
   const handleUpload = async () => {
     try {
       const formData = new FormData();
