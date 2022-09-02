@@ -39,7 +39,7 @@ export const WineForm = ({
   const [uploadResponseMsg, setUploadResponseMsg] = useState("");
 
   const [form] = Form.useForm();
-
+  let uploadResponse;
   const handleChangeType = (value) => {
     setList(value);
     setSubList("");
@@ -69,12 +69,21 @@ export const WineForm = ({
         formData.append("file", file);
       });
       setUploading(true);
-      const uploadResponse = await axiosWithTokenImageUpload(
-        "uploadSingleFile",
-        formData,
-        "POST"
-      );
-      getImgName(uploadResponse.data.imageName);
+      if (initialValues.brand === "") {
+        uploadResponse = await axiosWithTokenImageUpload(
+          "uploadSingleFile",
+          formData,
+          "POST"
+        );
+        getImgName(uploadResponse.data.imageName);
+      } else {
+        uploadResponse = await axiosWithTokenImageUpload(
+          `updateSingleFile/${initialValues.imageUrl}`,
+          formData,
+          "POST"
+        );
+        getImgName(uploadResponse.data.imageName);
+      }
       // console.log("Upload response: ", uploadResponse.data);
       setFileList([]);
       setUploaded(true);
@@ -108,7 +117,7 @@ export const WineForm = ({
     setList(initialValues.type);
     setSubList(initialValues.variety);
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
-
+  console.log("Initial data: ", initialValues);
   return (
     <Row>
       <Col

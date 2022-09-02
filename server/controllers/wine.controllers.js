@@ -6,6 +6,30 @@ const sharp = require("sharp");
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
 
+//Actualizar imagen en AWS s3 bucket
+module.exports.updateImage = async (req, res) => {
+  try {
+    const key = req.params.key;
+    const file = req.file;
+    const fileBuffer = await sharp(file.buffer)
+      .resize({
+        height: 1920,
+        width: 1080,
+        fit: "contain",
+        background: { r: 255, g: 255, b: 255, alpha: 0 },
+      })
+      .toBuffer();
+    await uploadFile(fileBuffer, key, file.mimetype);
+    return res.status(200).json({
+      status: "success",
+      msg: "Archivo actualizado con éxito!",
+      imageName: key,
+    });
+  } catch (err) {
+    res.status(500).json({ msg: "Error al actualizar el archivo", err });
+  }
+};
+
 //Subir una imagen a AWS s3 bucket
 module.exports.uploadImage = async (req, res) => {
   try {

@@ -10,6 +10,7 @@ const {
   updateWineById,
   uploadImage,
   downloadImage,
+  updateImage,
 } = require("../controllers/wine.controllers");
 const { validateJWT } = require("../middlewares/validate-jwt");
 
@@ -26,4 +27,10 @@ module.exports = (app) => {
     uploadImage
   );
   app.get("/api/getFile/:key", validateJWT, downloadImage);
+  app.post(
+    "/api/updateSingleFile/:key",
+    upload.single("file"),
+    validateJWT,
+    updateImage
+  );
 };
