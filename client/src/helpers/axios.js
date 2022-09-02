@@ -1,20 +1,15 @@
 import axios from "axios";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
-// const baseUrl = "http://localhost:8000/api";
-
-// console.log("Base URL", baseUrl);
 const KEY = "wines-app";
 
 export const axiosWithoutToken = (endpoint, data, method = "GET") => {
   const url = `${baseUrl}/${endpoint}`;
-  // console.log("URL env sin token", url);
   return axios({ method, url, data });
 };
 
 export const axiosWithToken = (endpoint, data, method = "GET") => {
   const url = `${baseUrl}/${endpoint}`;
-  // console.log("URL env", url);
   const token = JSON.parse(localStorage.getItem(KEY)).token || "";
   return axios({
     method,
@@ -22,6 +17,20 @@ export const axiosWithToken = (endpoint, data, method = "GET") => {
     data,
     headers: {
       "Content-type": "application/json",
+      "x-token": token,
+    },
+  });
+};
+
+export const axiosWithTokenImageUpload = (endpoint, data, method) => {
+  const url = `${baseUrl}/${endpoint}`;
+  const token = JSON.parse(localStorage.getItem(KEY)).token || "";
+  return axios({
+    method,
+    url,
+    data,
+    headers: {
+      "Content-type": "multipart/form-data",
       "x-token": token,
     },
   });

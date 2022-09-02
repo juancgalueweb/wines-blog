@@ -10,9 +10,9 @@ import { axiosWithoutToken } from "../helpers/axios";
 export const UserFormAntd = (props) => {
   const { titleSubmitButton } = props;
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+  // const onFinishFailed = (errorInfo) => {
+  //   console.log("Failed:", errorInfo);
+  // };
 
   const formItemLayout = {
     labelCol: {
@@ -47,8 +47,8 @@ export const UserFormAntd = (props) => {
   //Registro de usuario
   const registerUser = async (values) => {
     try {
-      const response = await axiosWithoutToken("auth/register", values, "POST");
-      console.log("Respuesta al registrar usuario", response);
+      await axiosWithoutToken("auth/register", values, "POST");
+      // console.log("Respuesta al registrar usuario", response);
       Swal.fire({
         icon: "success",
         title: `<strong>${values.fullName}</strong> se registró exitosamente. Por favor, inicie sesión`,
@@ -113,7 +113,7 @@ export const UserFormAntd = (props) => {
             passwordConfirmation: "",
             isAdult: false,
           }}
-          onFinishFailed={onFinishFailed}
+          // onFinishFailed={onFinishFailed}
         >
           {!isLogin ? (
             <Form.Item

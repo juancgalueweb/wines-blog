@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Form, Select, InputNumber, Button, Rate, Input, Row, Col } from "antd";
+import {
+  Form,
+  Select,
+  InputNumber,
+  Button,
+  Rate,
+  Input,
+  Row,
+  Col,
+  Upload,
+  Alert,
+} from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { winesOptions } from "../data/winesOptions";
+import { axiosWithTokenImageUpload } from "../helpers/axios";
 
 const { Option } = Select;
 const formItemLayout = {
@@ -12,28 +25,92 @@ const formItemLayout = {
   },
 };
 
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
-
-export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
+export const WineForm = ({
+  processSubmit,
+  initialValues,
+  titleButton,
+  getImgName,
+}) => {
   const [list, setList] = useState("");
   const [subList, setSubList] = useState("");
+  const [fileList, setFileList] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+  const [uploadResponseMsg, setUploadResponseMsg] = useState("");
 
   const [form] = Form.useForm();
-
+  let uploadResponse;
   const handleChangeType = (value) => {
     setList(value);
     setSubList("");
     form.setFieldsValue({
       variety: "",
     });
-    console.log(`Selected ${value}`);
+    // console.log(`Selected ${value}`);
   };
 
   const handleChangeVariety = (value) => {
-    console.log("Valor variety", value);
+    // console.log("Valor variety", value);
     setSubList(value);
+  };
+
+  const getFile = (e) => {
+    // console.log("Upload event: ", e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e?.fileList;
+  };
+
+  const handleUpload = async () => {
+    try {
+      const formData = new FormData();
+      fileList.forEach((file) => {
+        formData.append("file", file);
+      });
+      setUploading(true);
+      if (initialValues.imageUrl === "") {
+        uploadResponse = await axiosWithTokenImageUpload(
+          "uploadSingleFile",
+          formData,
+          "POST"
+        );
+        getImgName(uploadResponse.data.imageName);
+      } else {
+        uploadResponse = await axiosWithTokenImageUpload(
+          `updateSingleFile/${initialValues.imageUrl}`,
+          formData,
+          "POST"
+        );
+        getImgName(uploadResponse.data.imageName);
+      }
+      // console.log("Upload response: ", uploadResponse.data);
+      setFileList([]);
+      setUploaded(true);
+      setUploadResponseMsg(uploadResponse.data.msg);
+      setUploading(false);
+    } catch (err) {
+      setUploaded(false);
+      setUploadResponseMsg(err.response.data.msg);
+    }
+  };
+
+  const props = {
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
+    beforeUpload: (file) => {
+      setFileList([...fileList, file]);
+      return false;
+    },
+    // fileList,
+    // name: "file",
+    headers: {
+      authorization: "authorization-text",
+    },
   };
 
   useEffect(() => {
@@ -53,7 +130,6 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
           {...formItemLayout}
           onFinish={processSubmit}
           initialValues={initialValues}
-          onFinishFailed={onFinishFailed}
         >
           <Form.Item
             label="Marca del vino"
@@ -234,16 +310,42 @@ export const WineForm = ({ processSubmit, initialValues, titleButton }) => {
           </Form.Item>
 
           <Form.Item
-            label="Img url del vino"
-            name="imageUrl"
-            rules={[
-              {
-                type: "url",
-                message: "Por favor, ingrese una URL válida",
-              },
-            ]}
+            // name="imageUrl"
+            label="Subir foto"
+            getValueFromEvent={getFile}
           >
-            <Input />
+            <Upload
+              {...props}
+              accept=".jpg, .png, .jpeg"
+              maxCount={1}
+              listType="picture"
+              multiple={false}
+            >
+              <Button
+                icon={<UploadOutlined />}
+                disabled={fileList.length === 1 || uploaded}
+              >
+                Seleccione 1 foto
+              </Button>
+            </Upload>
+            <Button
+              type="secondary"
+              onClick={handleUpload}
+              disabled={fileList.length === 0}
+              loading={uploading}
+              style={{ marginTop: 16 }}
+            >
+              {uploading ? "Subiendo" : "Iniciar la subida"}
+            </Button>
+            {uploaded && (
+              <Alert
+                showIcon
+                message={uploadResponseMsg}
+                type="success"
+                closable={false}
+                style={{ marginTop: 15 }}
+              ></Alert>
+            )}
           </Form.Item>
 
           <Form.Item
