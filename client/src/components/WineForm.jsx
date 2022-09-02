@@ -97,8 +97,8 @@ export const WineForm = ({
       setFileList([...fileList, file]);
       return false;
     },
-    fileList,
-    name: "file",
+    // fileList,
+    // name: "file",
     headers: {
       authorization: "authorization-text",
     },

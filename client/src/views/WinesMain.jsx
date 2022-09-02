@@ -26,8 +26,13 @@ export const WinesMain = () => {
     try {
       const winesData = await axiosWithToken(`wines/${user._id}`);
       const promises = winesData.data.map(async (row) => {
-        const response = await axiosWithToken(`getFile/${row.imageUrl}`);
-        return { ...row, imageUrl: response.data.imageUrl, key: uuidv4() };
+        let response;
+        if (row.imageUrl !== "") {
+          response = await axiosWithToken(`getFile/${row.imageUrl}`);
+          return { ...row, imageUrl: response.data.imageUrl, key: uuidv4() };
+        } else {
+          return { ...row, key: uuidv4() };
+        }
       });
       const result = await Promise.all(promises);
       setWines(result);
