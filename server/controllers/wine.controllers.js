@@ -10,13 +10,13 @@ const generateFileName = (bytes = 32) =>
 module.exports.uploadImage = async (req, res) => {
   try {
     const file = req.file;
-    // console.log("File: ", file);
     const imageName = generateFileName();
     const fileBuffer = await sharp(file.buffer)
       .resize({
         height: 1920,
         width: 1080,
         fit: "contain",
+        background: { r: 255, g: 255, b: 255, alpha: 0 },
       })
       .toBuffer();
     await uploadFile(fileBuffer, imageName, file.mimetype);
@@ -34,9 +34,8 @@ module.exports.uploadImage = async (req, res) => {
 module.exports.downloadImage = async (req, res) => {
   try {
     const key = req.params.key;
-    const readStream = getObjectSignedUrl(key);
-    readStream.pipe(res);
-    // console.log("RES", readStream);
+    const imageUrl = await getObjectSignedUrl(key);
+    res.json({ imageUrl: imageUrl });
   } catch (err) {
     res
       .status(500)

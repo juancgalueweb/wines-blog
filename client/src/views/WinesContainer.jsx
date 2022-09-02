@@ -34,8 +34,10 @@ export const WinesContainer = () => {
   const getWineById = async () => {
     try {
       const wine = await axiosWithToken(`wine/${id}`);
-      // console.log("Data del vino de axios", wine.data);
-      setInitialData(wine.data);
+      const imageSignedUrl = await axiosWithToken(
+        `getFile/${wine.data.imageUrl}`
+      );
+      setInitialData({ ...wine.data, imageUrl: imageSignedUrl.data.imageUrl });
       setLoaded(true);
     } catch (err) {
       console.log("Error al obtener un vino por su ID", err);
@@ -60,7 +62,6 @@ export const WinesContainer = () => {
   };
 
   const newWine = async (values) => {
-    // console.log("Values after submitting: ", values);
     try {
       const answer = await axiosWithToken(
         "wine/new",
@@ -98,6 +99,7 @@ export const WinesContainer = () => {
     }
   };
 
+  //TODO: actualizar la imagen en el AWS s3 bucket
   const updateWine = async (values) => {
     try {
       const answer = await axiosWithToken(`wine/${id}`, values, "PUT");

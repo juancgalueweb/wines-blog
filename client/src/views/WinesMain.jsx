@@ -12,6 +12,7 @@ import noImage from "../images/no-image.png";
 import { thousandSeparator } from "../helpers/thousandSeparator";
 import { uniqueArrayData } from "../helpers/uniqueArrayData";
 import Swal from "sweetalert2";
+import { v4 as uuidv4 } from "uuid";
 
 export const WinesMain = () => {
   const [wines, setWines] = useState([]);
@@ -24,10 +25,13 @@ export const WinesMain = () => {
   const getWinesByUser = async () => {
     try {
       const winesData = await axiosWithToken(`wines/${user._id}`);
-      const result = winesData.data.map((row) => ({ ...row, key: row._id }));
+      const promises = winesData.data.map(async (row) => {
+        const response = await axiosWithToken(`getFile/${row.imageUrl}`);
+        return { ...row, imageUrl: response.data.imageUrl, key: uuidv4() };
+      });
+      const result = await Promise.all(promises);
       setWines(result);
       setLoaded(true);
-      // console.log("Data de los vinos por usuario", winesData.data);
     } catch (err) {
       // console.log("Error al consultar todos los vinos x usuario");
       Swal.fire({
@@ -42,6 +46,7 @@ export const WinesMain = () => {
     }
   };
 
+  //TODO: borrar la imagen del AWS s3 bucket y luego borrar la data asociada en la Base de Datos de MongoDB
   //Borrar un vino
   const deleteWine = (record) => {
     const executeDelete = async () => {

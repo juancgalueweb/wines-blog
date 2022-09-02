@@ -121,7 +121,6 @@ export const WineForm = ({
           {...formItemLayout}
           onFinish={processSubmit}
           initialValues={initialValues}
-          // onFinishFailed={onFinishFailed}
         >
           <Form.Item
             label="Marca del vino"

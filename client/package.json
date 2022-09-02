@@ -21,6 +21,7 @@
     "react-scripts": "4.0.3",
     "sass": "^1.54.4",
     "sweetalert2": "^11.4.28",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.1.2",
     "yup": "^0.32.11"
   },
