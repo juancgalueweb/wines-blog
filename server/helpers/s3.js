@@ -30,7 +30,7 @@ module.exports.uploadFile = (fileBuffer, fileName, mimetype) => {
   return s3Client.send(new PutObjectCommand(uploadParms));
 };
 
-// Downloads a file from s3
+// Downloads a file from AWS s3
 module.exports.getObjectSignedUrl = async (key) => {
   const params = {
     Key: key,
@@ -43,6 +43,7 @@ module.exports.getObjectSignedUrl = async (key) => {
   return url;
 };
 
+// Delete an object (file) from AWS s3
 module.exports.deleteObject = async (key) => {
   const params = {
     Key: key,
