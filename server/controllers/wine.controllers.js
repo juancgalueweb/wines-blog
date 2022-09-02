@@ -107,7 +107,9 @@ module.exports.getWineById = async (req, res) => {
 module.exports.deleteWineById = async (req, res) => {
   try {
     const wineToDelete = await WineModel.findById({ _id: req.params.id });
-    await deleteObject(wineToDelete.imageUrl);
+    if (wineToDelete.imageUrl !== "") {
+      await deleteObject(wineToDelete.imageUrl);
+    }
     await WineModel.deleteOne({ _id: req.params.id });
     return res.json({ msg: "Vino borrado satisfactoriamente" });
   } catch (err) {
@@ -121,7 +123,10 @@ module.exports.updateWineById = async (req, res) => {
     const updatedWine = await WineModel.findOneAndUpdate(
       { _id: req.params.id },
       req.body,
-      { new: true, runValidators: true }
+      {
+        new: true,
+        runValidators: true,
+      }
     );
     return res.json({ msg: "Vino modificado exitosamente", updatedWine });
   } catch (err) {

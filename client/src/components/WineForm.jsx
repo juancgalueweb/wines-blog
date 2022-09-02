@@ -69,7 +69,7 @@ export const WineForm = ({
         formData.append("file", file);
       });
       setUploading(true);
-      if (initialValues.brand === "") {
+      if (initialValues.imageUrl === "") {
         uploadResponse = await axiosWithTokenImageUpload(
           "uploadSingleFile",
           formData,

@@ -34,7 +34,7 @@ export const WinesContainer = () => {
   const getWineById = async () => {
     try {
       const wine = await axiosWithToken(`wine/${id}`);
-      // console.log("Wine by ID before adding signed url", wine.data);
+      // console.log("Wine by ID values", wine.data);
       setInitialData(wine.data);
       setLoaded(true);
     } catch (err) {
@@ -97,14 +97,23 @@ export const WinesContainer = () => {
     }
   };
 
+  let updateAnswer;
   const updateWine = async (values) => {
     // console.log("Values adentro del updateWine: ", values);
     try {
-      const answer = await axiosWithToken(`wine/${id}`, values, "PUT");
-      // console.log("Respuesta al actualizar vino", response);
+      if (!values.imageUrl) {
+        // console.log("S3images expected ", s3ImageName);
+        updateAnswer = await axiosWithToken(
+          `wine/${id}`,
+          { ...values, imageUrl: s3ImageName },
+          "PUT"
+        );
+      } else {
+        updateAnswer = await axiosWithToken(`wine/${id}`, values, "PUT");
+      }
       Swal.fire({
         icon: "success",
-        title: `${answer.data.msg}`,
+        title: `${updateAnswer.data.msg}`,
         showConfirmButton: false,
         timer: 2000,
       });
