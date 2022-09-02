@@ -249,9 +249,9 @@ export const WinesMain = () => {
     },
   ];
 
-  const tableOnChange = (pagination, filters, sorter) => {
-    console.log("Table params", pagination, filters, sorter);
-  };
+  // const tableOnChange = (pagination, filters, sorter) => {
+  //   console.log("Table params", pagination, filters, sorter);
+  // };
 
   return (
     <>
@@ -303,7 +303,7 @@ export const WinesMain = () => {
                 <Table
                   columns={columns}
                   dataSource={wines}
-                  onChange={tableOnChange}
+                  // onChange={tableOnChange}
                   pagination={{
                     showSizeChanger: true,
                     current: page,

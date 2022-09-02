@@ -1,5 +1,9 @@
 const WineModel = require("../models/wine.model");
-const { uploadFile, getObjectSignedUrl } = require("../helpers/s3");
+const {
+  uploadFile,
+  getObjectSignedUrl,
+  deleteObject,
+} = require("../helpers/s3");
 const crypto = require("crypto");
 const sharp = require("sharp");
 
@@ -102,6 +106,8 @@ module.exports.getWineById = async (req, res) => {
 //Borrar un vino por el ID del vino
 module.exports.deleteWineById = async (req, res) => {
   try {
+    const wineToDelete = await WineModel.findById({ _id: req.params.id });
+    await deleteObject(wineToDelete.imageUrl);
     await WineModel.deleteOne({ _id: req.params.id });
     return res.json({ msg: "Vino borrado satisfactoriamente" });
   } catch (err) {

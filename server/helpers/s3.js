@@ -2,6 +2,7 @@ const {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
@@ -17,6 +18,7 @@ const s3Client = new S3Client({
     secretAccessKey,
   },
 });
+
 // Uploads a file to s3
 module.exports.uploadFile = (fileBuffer, fileName, mimetype) => {
   const uploadParms = {
@@ -36,7 +38,16 @@ module.exports.getObjectSignedUrl = async (key) => {
   };
 
   const command = new GetObjectCommand(params);
-  const seconds = 172800; //2 días en segundos
+  const seconds = 86400; //1 día en segundos
   const url = await getSignedUrl(s3Client, command, { expiresIn: seconds });
   return url;
+};
+
+module.exports.deleteObject = async (key) => {
+  const params = {
+    Key: key,
+    Bucket: bucketName,
+  };
+
+  await s3Client.send(new DeleteObjectCommand(params));
 };

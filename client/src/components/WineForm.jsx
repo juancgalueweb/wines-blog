@@ -55,7 +55,7 @@ export const WineForm = ({
   };
 
   const getFile = (e) => {
-    console.log("Upload event: ", e);
+    // console.log("Upload event: ", e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -117,7 +117,7 @@ export const WineForm = ({
     setList(initialValues.type);
     setSubList(initialValues.variety);
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
-  console.log("Initial data: ", initialValues);
+
   return (
     <Row>
       <Col
