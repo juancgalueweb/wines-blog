@@ -1,5 +1,5 @@
 # First stage
-FROM node:16-slim AS builder
+FROM node:fermium-alpine3.15 AS builder
 
 WORKDIR /usr/src/app
 
