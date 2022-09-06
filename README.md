@@ -25,9 +25,9 @@
 - [Tecnologías usadas](#built_using)
 - [Autor](#authors)
   <!-- - [TODO](../TODO.md) -->
-  <!-- - [Usage](#usage) -->
-  <!-- - [Contributing](../CONTRIBUTING.md) -->
-  <!-- - [Acknowledgments](#acknowledgement) -->
+  - [Deployment](#deploy)
+    <!-- - [Contributing](../CONTRIBUTING.md) -->
+    <!-- - [Acknowledgments](#acknowledgement) -->
 
 ## 🧐 Acerca de <a name = "about"></a>
 
@@ -106,3 +106,8 @@ AWS_SECRET_KEY="LLAVE_SECRETA_DE_AWS"
 ## ✍️ Authors <a name = "authors"></a>
 
 - [@juancgalueweb](https://github.com/juancgalueweb/) - Idea y desarrollo del código.
+
+## 🚀 Deployment <a name = "deploy"></a>
+
+Pueden acceder a la app desde el siguiente sitio web:
+[https://mywines.juancgalue-web.cl/](https://mywines.juancgalue-web.cl/home)
