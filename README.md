@@ -25,7 +25,7 @@
 - [Tecnologías usadas](#built_using)
 - [Autor](#authors)
   <!-- - [TODO](../TODO.md) -->
-  - [Deployment](#deploy)
+- [Deployment](#deploy)
     <!-- - [Contributing](../CONTRIBUTING.md) -->
     <!-- - [Acknowledgments](#acknowledgement) -->
 
