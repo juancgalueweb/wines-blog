@@ -20,65 +20,66 @@
 
 <!-- - [Deployment](#deployment) -->
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Built Using](#built_using)
-- [Authors](#authors)
+- [Acerca de](#about)
+- [Empecemos](#getting_started)
+- [Tecnologías usadas](#built_using)
+- [Autor](#authors)
   <!-- - [TODO](../TODO.md) -->
   <!-- - [Usage](#usage) -->
   <!-- - [Contributing](../CONTRIBUTING.md) -->
   <!-- - [Acknowledgments](#acknowledgement) -->
 
-## 🧐 About <a name = "about"></a>
+## 🧐 Acerca de <a name = "about"></a>
 
-Si tienes curiosidad, te invito a registrarte, iniciar sesión, y registrar tu primer vino. Puedes añadir la foto del vino que vayas a registrar, vía URL, y podrás ver la foto al hacer click en la table donde se muestran todos los vinos. Esto es un trabajo en progreso, así que paciencia.
+Si tienes curiosidad, te invito a registrarte, iniciar sesión, y registrar tu primer vino. Puedes añadir la foto del vino desde tu ordenador (.jpg o .png), y podrás verla al hacer click en la table donde se muestran todos los vinos.
 
-## 🏁 Getting Started <a name = "getting_started"></a>
+## 🏁 Empecemos <a name = "getting_started"></a>
 
-Para usar este proyecto, simplemente has un clone del proyecto e instalando las dependencias.
+### Instalación
 
-### Prerequisites
-
-Debes usar la versión de NODE 16. No uses otras versiones porque no te funcionará la aplicación. Te sugiero instalar y usar NVM, un manejador de versiones de node.
-
-Deberás crear dos archivos de variables de enterno. En la raíz del proyecto, debes crear un `.env`, con la siguiente data:
+Crea una carpeta donde desees instalar el proyect. Usando la terminal, ve hasta la ruta de esa carpeta y haz un clon del proyecto, mediante:
 
 ```
-SECRET_KEY="tu-llave-secreta"
-LOCAL_DB_URL="mongodb://localhost/NOMBRE_BASE_DE_DATOS"
-PORT=NUMERO_DE_PUERTO
+git clone https://github.com/juancgalueweb/wines-blog.git
+```
+
+En la raíz de la carpeta hay un archivo `Makefile` con una serie de tareas para que fácilmente puedas crear las imágenes de Docker y correr los contenedores con solo escribir lo siguiente: <br>
+`make build-dev` <br>
+`make run-dev` <br>
+
+Con este podrás correr el proyecto en el modo de desarollo (base de datos dentro del contenedor).
+
+Si se fijan, en el archivo `docker-compose-dev.yml`, expuse el puerto 27020 para que puedan conectarse a la base de datos desde el contenedor. Ejemplo, usando MongoDB Compass, te puedes conectar a la base de datos desde la siguiente URI: `mongodb://localhost:27020`
+
+### Prerequisitos
+
+Este proyecto está dockerizado, por lo que debes tener instalado Docker.
+
+Las imágenes que subas a la app, se almacenan en AWS S3, y en la base de datos de MongoDB solo se almacena la `key` de esa imagen, para poder luego descagarla, eliminarla, etc. Por lo tanto, también debes tener una cuenta de AWS, crear un bucket en S3, generar políticas para el bucket para poder obtener un objeto, actualizarlo y borrarlo, y dar permiso a tu servidor Express para que se conecte con AWS mediante la creación de un usuario desde IAM (Identity and Access Management).
+
+Deberás crear varios archivos de variables de enterno. En la ruta `server/config/`, debes crear un `.env.dev`, con la siguiente data:
+
+```
+SECRET_KEY="tu-llave-secreta-de-json-web-token"
+MONGO_URI="mongodb://mongo/NOMBRE_BASE_DE_DATOS"
+AWS_BUCKET_NAME="NOMBRE_DE_TU_BUCKET"
+AWS_BUCKET_REGION="BUCKET_REGION"
+AWS_ACCESS_KEY="ID_CLAVE_DE_ACCESO_AWS"
+AWS_SECRET_KEY="LLAVE_SECRETA_DE_AWS"
 ```
 
 En la carpeta `client`, debes crear un `.env.development`, con la siguiente data:
 
 ```
-REACT_APP_API_URL=http://localhost:PORT/api
+REACT_APP_BASE_URL=http://localhost:8000/api
 ```
 
-En `PORT`, debes usar el mismo puerto definido en el `.env` que debe ir en la carpeta server.
+## ⛏️ Tecnologías usadas <a name = "built_using"></a>
 
-### Installing
-
-Copia y pega lo siguiente en tu terminal. Asegúrate de que en tu terminal, estés en la ruta donde desees instalar el proyecto y sus dependencias.
-
-```
-https://github.com/juancgalueweb/wines-blog.git
-```
-
-En la carpeta `server` del proyecto, recuerda instalar todas las dependencias, usando:
-
-```
-npm install
-```
-
-También recuerda instalar las dependencias dentro de la carpeta `client`.
-
-## ⛏️ Built Using <a name = "built_using"></a>
-
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [React](https://reactjs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
+- <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MongoDB_Logo.svg" alt="MongoDB icon" style="display: inline-block; width: 40px"> [MongoDB](https://www.mongodb.com/) - Database
+- <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" alt="ExpressJS icon" style="display: inline-block; height: 20px"> [Express](https://expressjs.com/) - Server Framework
+- <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="ReactJS icon" style="display: inline-block; width: 20px"> [React](https://reactjs.org/) - Web Framework
+- <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="NodeJS icon" style="display: inline-block; width: 20px"> [NodeJs](https://nodejs.org/en/) - Server Environment
 
 ## ✍️ Authors <a name = "authors"></a>
 
