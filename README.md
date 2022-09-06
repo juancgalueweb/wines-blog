@@ -76,11 +76,11 @@ REACT_APP_BASE_URL=http://localhost:8000/api
 
 Usamos el puerto 8000, porque en la ruta `server/server.js` definimos que ese era nuestro número de puerto.
 
-Si quiere usar el modo local del proyecto, que crea la carpeta build que genera React, y que permite manejar la base de datos desde la web usando MongoDB Atlas, y probar que todo funcione bien antes de hacer el deployment, en la carpeta raíz del proyecto escriba en la terminal: <br>
+Si quieres usar el modo local del proyecto, que crea la carpeta build que genera React, y que permite manejar la base de datos desde la web usando MongoDB Atlas, y probar que todo funcione bien antes de hacer el deployment, en la carpeta raíz del proyecto escriba en la terminal: <br>
 `make build-local` <br>
 `make run-local` <br>
 
-Debe tener una cuenta en MongoDB Atlas, crear un proyecto, crear un cluster, crear un acceso a la base de datos mediante la creación de un usuario, definir las direcciones IP desde donde tendrá acceso su aplicación. Para este caso, dar acceso desde 0.0.0.0/0 (todas las IPs).
+Debes tener una cuenta en MongoDB Atlas, crear un proyecto, crear un cluster, crear un acceso a la base de datos mediante la creación de un usuario, definir las direcciones IP desde donde tendrá acceso su aplicación. Para este caso, dar acceso desde 0.0.0.0/0 (todas las IPs).
 
 En la ruta `server/config/`, debes crear un `.env.local`, con la siguiente data:
 
