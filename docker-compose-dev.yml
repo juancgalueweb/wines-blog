@@ -25,6 +25,7 @@ services:
     depends_on:
       - mongo
   mongo:
+  # I had to use this mongo image because my Mac OS runs on M1 chip, if you have a Linux or Intel compatible chip, you can use a normal mongo image
     image: arm64v8/mongo:4.4-focal
 #To connect to mongo database using MongoDB Compass UI, use: mongodb://localhost:27020
     ports:
