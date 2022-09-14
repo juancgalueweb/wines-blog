@@ -38,7 +38,6 @@ export const WinesMain = () => {
       setWines(result);
       setLoaded(true);
     } catch (err) {
-      // console.log("Error al consultar todos los vinos x usuario");
       Swal.fire({
         icon: "error",
         title: `${err.response.data.msg}`,
@@ -51,7 +50,6 @@ export const WinesMain = () => {
     }
   };
 
-  //TODO: borrar la imagen del AWS s3 bucket y luego borrar la data asociada en la Base de Datos de MongoDB
   //Borrar un vino
   const deleteWine = (record) => {
     const executeDelete = async () => {
@@ -59,7 +57,6 @@ export const WinesMain = () => {
         await axiosWithToken(`wine/delete/${record._id}`, {}, "DELETE");
         setWines(wines.filter((wine) => wine._id !== record._id));
       } catch (err) {
-        // console.log("Error al borrar", err);
         Swal.fire({
           icon: "error",
           title: `${err.response.data.msg}`,
@@ -83,7 +80,6 @@ export const WinesMain = () => {
   };
 
   useEffect(() => {
-    // console.log("Usario del contexto", user);
     if (!user) {
       history.push("/login");
     }
@@ -249,13 +245,8 @@ export const WinesMain = () => {
     },
   ];
 
-  // const tableOnChange = (pagination, filters, sorter) => {
-  //   console.log("Table params", pagination, filters, sorter);
-  // };
-
   return (
     <>
-      {/* {console.log(uniqueArrayData(wines, "rating").sort((a, b) => a - b))} */}
       <Container
         className="my-3 mx-auto shadow rounded px-4 py-3"
         id="my-container"
