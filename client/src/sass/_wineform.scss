@@ -1,3 +1,15 @@
 .light-background {
   background-color: #fafafa;
 }
+
+.fa-trash {
+  color: #F73F3F;
+  margin-left: 25px;
+    &:hover {
+      cursor: pointer;
+    }
+}
+
+.hide-trash {
+  display: none;
+}

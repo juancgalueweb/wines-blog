@@ -71,6 +71,20 @@ module.exports.downloadImage = async (req, res) => {
   }
 };
 
+//Borrar imagen en el AWS s3 bucket
+module.exports.deleteImageFile = async (req, res) => {
+  try {
+    const key = req.params.key;
+    await deleteObject(key);
+    return res.json({
+      status: "success",
+      msg: "Imagen borrada satisfactoriamente",
+    });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al borrar la image del AWS s3" });
+  }
+};
+
 //Crear una reseña de vino
 module.exports.addWine = async (req, res) => {
   try {

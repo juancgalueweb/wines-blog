@@ -11,6 +11,7 @@ const {
   uploadImage,
   downloadImage,
   updateImage,
+  deleteImageFile,
 } = require("../controllers/wine.controllers");
 const { validateJWT } = require("../middlewares/validate-jwt");
 
@@ -33,4 +34,5 @@ module.exports = (app) => {
     validateJWT,
     updateImage
   );
+  app.delete("/api/deleteImageFile/:key", validateJWT, deleteImageFile);
 };

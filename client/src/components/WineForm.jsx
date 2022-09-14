@@ -10,10 +10,14 @@ import {
   Col,
   Upload,
   Alert,
+  Image,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { winesOptions } from "../data/winesOptions";
-import { axiosWithTokenImageUpload } from "../helpers/axios";
+import { axiosWithTokenImageUpload, axiosWithToken } from "../helpers/axios";
+import { useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const { Option } = Select;
 const formItemLayout = {
@@ -37,6 +41,11 @@ export const WineForm = ({
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
   const [uploadResponseMsg, setUploadResponseMsg] = useState("");
+  const location = useLocation();
+  const [done, setDone] = useState(false);
+  const [secureUrl, setSecureUrl] = useState("");
+  const [imageDeleted, setImageDeleted] = useState(false);
+  const [deletedMsg, setDeletedMsg] = useState("");
 
   const [form] = Form.useForm();
   let uploadResponse;
@@ -46,20 +55,27 @@ export const WineForm = ({
     form.setFieldsValue({
       variety: "",
     });
-    // console.log(`Selected ${value}`);
   };
 
   const handleChangeVariety = (value) => {
-    // console.log("Valor variety", value);
     setSubList(value);
   };
 
   const getFile = (e) => {
-    // console.log("Upload event: ", e);
     if (Array.isArray(e)) {
       return e;
     }
     return e && e?.fileList;
+  };
+
+  const getSignedUrl = async () => {
+    if (initialValues?.imageUrl !== "") {
+      const response = await axiosWithToken(
+        `getFile/${initialValues?.imageUrl}`
+      );
+      setSecureUrl(response.data.imageUrl);
+      setDone(true);
+    }
   };
 
   const handleUpload = async () => {
@@ -84,7 +100,6 @@ export const WineForm = ({
         );
         getImgName(uploadResponse.data.imageName);
       }
-      // console.log("Upload response: ", uploadResponse.data);
       setFileList([]);
       setUploaded(true);
       setUploadResponseMsg(uploadResponse.data.msg);
@@ -92,6 +107,23 @@ export const WineForm = ({
     } catch (err) {
       setUploaded(false);
       setUploadResponseMsg(err.response.data.msg);
+    }
+  };
+
+  const deleteImageFromS3 = async () => {
+    try {
+      const deleteResponse = await axiosWithToken(
+        `deleteImageFile/${initialValues.imageUrl}`,
+        {},
+        "DELETE"
+      );
+      setDeletedMsg(deleteResponse.data.msg);
+      setImageDeleted(true);
+    } catch (error) {
+      console.log(
+        "🚀 ~ file: WineForm.jsx ~ line 122 ~ deleteImageFromS3 ~ error",
+        error
+      );
     }
   };
 
@@ -106,8 +138,6 @@ export const WineForm = ({
       setFileList([...fileList, file]);
       return false;
     },
-    // fileList,
-    // name: "file",
     headers: {
       authorization: "authorization-text",
     },
@@ -116,6 +146,9 @@ export const WineForm = ({
   useEffect(() => {
     setList(initialValues.type);
     setSubList(initialValues.variety);
+    if (location.pathname !== "/nuevo-vino") {
+      getSignedUrl();
+    }
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -328,6 +361,7 @@ export const WineForm = ({
                 Seleccione 1 foto
               </Button>
             </Upload>
+
             <Button
               type="secondary"
               onClick={handleUpload}
@@ -337,6 +371,27 @@ export const WineForm = ({
             >
               {uploading ? "Subiendo" : "Iniciar la subida"}
             </Button>
+            {done && (
+              <Col className={uploaded || imageDeleted ? "hide-trash" : ""}>
+                <Image src={secureUrl} alt="Imagen de vino" height={70} />
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  onClick={deleteImageFromS3}
+                  className="fa-trash"
+                  title="Borrar imagen del servidor"
+                />
+              </Col>
+            )}
+            {imageDeleted && (
+              <Alert
+                showIcon
+                message={deletedMsg}
+                type="success"
+                closable={false}
+                style={{ marginTop: 15 }}
+              ></Alert>
+            )}
+
             {uploaded && (
               <Alert
                 showIcon

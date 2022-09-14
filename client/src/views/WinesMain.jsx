@@ -224,7 +224,7 @@ export const WinesMain = () => {
       title: "Img",
       dataIndex: "imageUrl",
       render: (record) => {
-        return <Image height={30} src={!record ? noImage : record} />;
+        return <Image width={30} src={!record ? noImage : record} />;
       },
     },
     {

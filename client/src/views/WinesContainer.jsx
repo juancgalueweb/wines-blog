@@ -34,11 +34,9 @@ export const WinesContainer = () => {
   const getWineById = async () => {
     try {
       const wine = await axiosWithToken(`wine/${id}`);
-      // console.log("Wine by ID values", wine.data);
       setInitialData(wine.data);
       setLoaded(true);
     } catch (err) {
-      // console.log("Error al obtener un vino por su ID", err);
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -76,7 +74,6 @@ export const WinesContainer = () => {
         history.push("/mis-vinos");
       }, 2100);
     } catch (err) {
-      // console.log("Error", err.response);
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -99,10 +96,8 @@ export const WinesContainer = () => {
 
   let updateAnswer;
   const updateWine = async (values) => {
-    // console.log("Values adentro del updateWine: ", values);
     try {
       if (!values.imageUrl) {
-        // console.log("S3images expected ", s3ImageName);
         updateAnswer = await axiosWithToken(
           `wine/${id}`,
           { ...values, imageUrl: s3ImageName },
@@ -121,7 +116,6 @@ export const WinesContainer = () => {
         history.push("/mis-vinos");
       }, 2100);
     } catch (err) {
-      // console.log("Error al modificar el vino", err);
       Swal.fire({
         icon: "error",
         title: "Error",
