@@ -372,8 +372,11 @@ export const WineForm = ({
               {uploading ? "Subiendo" : "Iniciar la subida"}
             </Button>
             {done && (
-              <Col className={uploaded || imageDeleted ? "hide-trash" : ""}>
-                <Image src={secureUrl} alt="Imagen de vino" height={70} />
+              <Col
+                className={uploaded || imageDeleted ? "hide-trash" : ""}
+                style={{ marginTop: 10 }}
+              >
+                <Image src={secureUrl} alt="Imagen de vino" width={40} />
                 <FontAwesomeIcon
                   icon={faTrash}
                   onClick={deleteImageFromS3}
