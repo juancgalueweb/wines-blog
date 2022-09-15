@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { WineForm } from "../components/WineForm";
@@ -192,7 +192,9 @@ export const WinesContainer = () => {
               getImgName={(s3ImageName) => setS3ImageName(s3ImageName)}
             />
           ) : (
-            <h1>Cargando...</h1>
+            <div className="spin-center">
+              <Spin size="large" />
+            </div>
           )}
         </Col>
       </Row>

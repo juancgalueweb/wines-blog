@@ -21,6 +21,7 @@ export const WinesMain = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
   const history = useHistory();
+  const [loading, setLoading] = useState(true);
 
   const getWinesByUser = async () => {
     try {
@@ -37,6 +38,7 @@ export const WinesMain = () => {
       const result = await Promise.all(promises);
       setWines(result);
       setLoaded(true);
+      setLoading(false);
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -98,6 +100,8 @@ export const WinesMain = () => {
     localStorage.clear();
     history.push("/login");
   };
+
+  const tableProps = { loading };
 
   //Definiendo las columnas de la tabla de Ant Design
   const columns = [
@@ -292,9 +296,9 @@ export const WinesMain = () => {
                   <Badge count={wines.length} />
                 </div>
                 <Table
+                  {...tableProps}
                   columns={columns}
                   dataSource={wines}
-                  // onChange={tableOnChange}
                   pagination={{
                     showSizeChanger: true,
                     current: page,
