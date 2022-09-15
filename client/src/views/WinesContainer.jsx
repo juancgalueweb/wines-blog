@@ -22,6 +22,7 @@ export const WinesContainer = () => {
     rating: "",
     price: "",
     imageUrl: "",
+    imageOriginalName: "",
   };
 
   const history = useHistory();
@@ -30,6 +31,7 @@ export const WinesContainer = () => {
   const [initialData, setInitialData] = useState(startingData);
   const { id } = useParams();
   const [s3ImageName, setS3ImageName] = useState("");
+  const [fileName, setFileName] = useState("");
 
   const getWineById = async () => {
     try {
@@ -61,7 +63,12 @@ export const WinesContainer = () => {
     try {
       const answer = await axiosWithToken(
         "wine/new",
-        { ...values, author: user._id, imageUrl: s3ImageName },
+        {
+          ...values,
+          author: user._id,
+          imageUrl: s3ImageName,
+          imageOriginalName: fileName,
+        },
         "POST"
       );
       Swal.fire({
@@ -98,7 +105,7 @@ export const WinesContainer = () => {
     try {
       const updateAnswer = await axiosWithToken(
         `wine/${id}`,
-        { ...values, imageUrl: s3ImageName },
+        { ...values, imageUrl: s3ImageName, imageOriginalName: fileName },
         "PUT"
       );
 
@@ -186,6 +193,7 @@ export const WinesContainer = () => {
               initialValues={initialData}
               titleButton={id !== undefined ? "Actualizar" : "Crear"}
               getImgName={(s3ImageName) => setS3ImageName(s3ImageName)}
+              getFileName={(fileName) => setFileName(fileName)}
             />
           ) : (
             <div className="spin-center">

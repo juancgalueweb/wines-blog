@@ -51,6 +51,9 @@ const WineSchema = new Schema({
   imageUrl: {
     type: String,
   },
+  imageOriginalName: {
+    type: String,
+  },
   author: {
     type: Schema.Types.ObjectId,
     ref: "UserModel",

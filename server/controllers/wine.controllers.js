@@ -28,6 +28,7 @@ module.exports.updateImage = async (req, res) => {
       status: "success",
       msg: "Archivo actualizado con éxito!",
       imageName: key,
+      originalName: file.originalname,
     });
   } catch (err) {
     res.status(500).json({ msg: "Error al actualizar el archivo", err });
@@ -52,6 +53,7 @@ module.exports.uploadImage = async (req, res) => {
       status: "success",
       msg: "Archivo subido con éxito!",
       imageName: imageName,
+      originalName: file.originalname,
     });
   } catch (err) {
     res.status(500).json({ msg: "Error al subir el archivo", err });

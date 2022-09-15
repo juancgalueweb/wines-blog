@@ -34,6 +34,7 @@ export const WineForm = ({
   initialValues,
   titleButton,
   getImgName,
+  getFileName,
 }) => {
   const [list, setList] = useState("");
   const [subList, setSubList] = useState("");
@@ -71,6 +72,7 @@ export const WineForm = ({
   const getSignedUrl = async () => {
     if (initialValues?.imageUrl !== "") {
       getImgName(initialValues?.imageUrl);
+      getFileName(initialValues?.imageOriginalName);
       const response = await axiosWithToken(
         `getFile/${initialValues?.imageUrl}`
       );
@@ -93,6 +95,7 @@ export const WineForm = ({
           "POST"
         );
         getImgName(uploadResponse.data.imageName);
+        getFileName(uploadResponse.data.originalName);
       } else {
         uploadResponse = await axiosWithTokenImageUpload(
           `updateSingleFile/${initialValues.imageUrl}`,
@@ -100,6 +103,7 @@ export const WineForm = ({
           "POST"
         );
         getImgName(uploadResponse.data.imageName);
+        getFileName(uploadResponse.data.originalName);
       }
       setFileList([]);
       setUploaded(true);
@@ -112,7 +116,6 @@ export const WineForm = ({
   };
 
   const deleteImageFromS3 = async () => {
-    getImgName("");
     try {
       const deleteResponse = await axiosWithToken(
         `deleteImageFile/${initialValues.imageUrl}`,
@@ -121,6 +124,8 @@ export const WineForm = ({
       );
       setDeletedMsg(deleteResponse.data.msg);
       setImageDeleted(true);
+      getImgName("");
+      getFileName("");
     } catch (error) {
       console.log(
         "🚀 ~ file: WineForm.jsx ~ line 129 ~ deleteImageFromS3 ~ error",
@@ -379,6 +384,9 @@ export const WineForm = ({
                 style={{ marginTop: 10 }}
               >
                 <Image src={secureUrl} alt="Imagen de vino" width={40} />
+                <p style={{ display: "inline-block", marginLeft: "10px" }}>
+                  {initialValues?.imageOriginalName}
+                </p>
                 <FontAwesomeIcon
                   icon={faTrash}
                   onClick={deleteImageFromS3}
