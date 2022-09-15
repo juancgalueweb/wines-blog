@@ -20,7 +20,7 @@ module.exports = (app) => {
   app.get("/api/wines/:id", validateJWT, getWinesByUser);
   app.get("/api/wine/:id", validateJWT, getWineById);
   app.delete("/api/wine/delete/:id", validateJWT, deleteWineById);
-  app.put("/api/wine/:id", updateWineById);
+  app.put("/api/wine/:id", validateJWT, updateWineById);
   app.post(
     "/api/uploadSingleFile",
     upload.single("file"),

@@ -15,6 +15,8 @@ module.exports.updateImage = async (req, res) => {
   try {
     const key = req.params.key;
     const file = req.file;
+    //* I had to use this function to properly get the filename in Spanish
+    const fileName = Buffer.from(file.originalname, "latin1").toString("utf8");
     const fileBuffer = await sharp(file.buffer)
       .resize({
         height: 1920,
@@ -28,7 +30,7 @@ module.exports.updateImage = async (req, res) => {
       status: "success",
       msg: "Archivo actualizado con éxito!",
       imageName: key,
-      originalName: file.originalname,
+      originalName: fileName,
     });
   } catch (err) {
     res.status(500).json({ msg: "Error al actualizar el archivo", err });
@@ -39,6 +41,8 @@ module.exports.updateImage = async (req, res) => {
 module.exports.uploadImage = async (req, res) => {
   try {
     const file = req.file;
+    //* I had to use this function to properly get the filename in Spanish
+    const fileName = Buffer.from(file.originalname, "latin1").toString("utf8");
     const imageName = generateFileName();
     const fileBuffer = await sharp(file.buffer)
       .resize({
@@ -53,7 +57,7 @@ module.exports.uploadImage = async (req, res) => {
       status: "success",
       msg: "Archivo subido con éxito!",
       imageName: imageName,
-      originalName: file.originalname,
+      originalName: fileName,
     });
   } catch (err) {
     res.status(500).json({ msg: "Error al subir el archivo", err });
