@@ -70,6 +70,7 @@ export const WineForm = ({
 
   const getSignedUrl = async () => {
     if (initialValues?.imageUrl !== "") {
+      getImgName(initialValues?.imageUrl);
       const response = await axiosWithToken(
         `getFile/${initialValues?.imageUrl}`
       );
@@ -111,6 +112,7 @@ export const WineForm = ({
   };
 
   const deleteImageFromS3 = async () => {
+    getImgName("");
     try {
       const deleteResponse = await axiosWithToken(
         `deleteImageFile/${initialValues.imageUrl}`,
@@ -121,7 +123,7 @@ export const WineForm = ({
       setImageDeleted(true);
     } catch (error) {
       console.log(
-        "🚀 ~ file: WineForm.jsx ~ line 122 ~ deleteImageFromS3 ~ error",
+        "🚀 ~ file: WineForm.jsx ~ line 129 ~ deleteImageFromS3 ~ error",
         error
       );
     }

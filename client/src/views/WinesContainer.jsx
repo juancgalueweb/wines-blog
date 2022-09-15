@@ -94,18 +94,14 @@ export const WinesContainer = () => {
     }
   };
 
-  let updateAnswer;
   const updateWine = async (values) => {
     try {
-      if (!values.imageUrl) {
-        updateAnswer = await axiosWithToken(
-          `wine/${id}`,
-          { ...values, imageUrl: s3ImageName },
-          "PUT"
-        );
-      } else {
-        updateAnswer = await axiosWithToken(`wine/${id}`, values, "PUT");
-      }
+      const updateAnswer = await axiosWithToken(
+        `wine/${id}`,
+        { ...values, imageUrl: s3ImageName },
+        "PUT"
+      );
+
       Swal.fire({
         icon: "success",
         title: `${updateAnswer.data.msg}`,
