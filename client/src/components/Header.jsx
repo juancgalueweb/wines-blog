@@ -28,7 +28,7 @@ export const Header = () => {
   };
 
   return (
-    <Navbar bg="light" expand="lg" fixed="top">
+    <Navbar collapseOnSelect bg="light" expand="lg" fixed="top">
       <Container>
         <Navbar.Brand id="brand-text">
           <img
@@ -40,24 +40,24 @@ export const Header = () => {
           />{" "}
           Mis vinos favoritos
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link onClick={() => history.push("/home")}>
+            <Nav.Link href="/home">
               <FontAwesomeIcon icon={faHome} className="me-2" />
               Home
             </Nav.Link>
-            <Nav.Link onClick={() => history.push("/mis-vinos")}>
+            <Nav.Link href="/mis-vinos">
               <FontAwesomeIcon icon={faWineGlassAlt} className="me-2" />
               Ver mis vinos
             </Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link onClick={handleRegister}>
+            <Nav.Link onClick={handleRegister} href="/register">
               <FontAwesomeIcon icon={faUserPlus} className="me-2" />
               Registro
             </Nav.Link>
-            <Nav.Link onClick={handleLogin}>
+            <Nav.Link onClick={handleLogin} href="/login">
               <FontAwesomeIcon icon={faSignInAlt} className="me-2" />
               Login
             </Nav.Link>

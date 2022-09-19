@@ -30,9 +30,13 @@ export const LoginRegisterScreen = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Container className="m-3 w-75 mx-auto">
+    <Container className="m-3 mx-auto">
       <Row>
-        <Col span={14} className="border rounded bg-light mx-auto pb-2 pt-4">
+        <Col
+          xs={23}
+          xl={14}
+          className="border rounded bg-light mx-auto pb-2 pt-4"
+        >
           {isLogin ? (
             <h2 className="text-center">Login</h2>
           ) : (

@@ -54,13 +54,13 @@ export const HomeScreen = () => {
         </div>
       </Carousel>
       <h1 className="text-dark text-center pt-3">Beneficios de tomar vino</h1>
-      <div className="site-card-wrapper" style={{ margin: "20px" }}>
+      <div className="my-container">
         <Row gutter={16}>
-          <Col span={8}>
+          <Col xs={24} xl={8}>
             <Card
               title="Previene enfermedades cardíacas"
-              bordered={false}
-              style={{ minHeight: "fit-content" }}
+              headStyle={{ backgroundColor: "#fafafa" }}
+              style={{ minHeight: "fit-content", marginTop: 10 }}
             >
               Las propiedades del vino tinto para el corazón son unas de las más
               estudiadas por la comunidad científica y extendidas por todo el
@@ -70,11 +70,11 @@ export const HomeScreen = () => {
               muy beneficioso para la salud cardíaca a largo plazo.
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} xl={8}>
             <Card
               title="Ayuda a prevenir el colesterol"
-              bordered={false}
-              style={{ minHeight: "fit-content" }}
+              headStyle={{ backgroundColor: "#fafafa" }}
+              style={{ minHeight: "fit-content", marginTop: 10 }}
             >
               Como ya hemos comentado, esta bebida es muy rica en polifenoles
               como el resveratrol: un componente con alta concentración de
@@ -82,11 +82,11 @@ export const HomeScreen = () => {
               lipoproteínas de baja densidad (LDL o "colesterol malo").
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} xl={8}>
             <Card
               title="Aumenta los niveles de Omega 3"
-              bordered={false}
-              style={{ minHeight: "fit-content" }}
+              headStyle={{ backgroundColor: "#fafafa" }}
+              style={{ minHeight: "fit-content", marginTop: 10 }}
             >
               Prestigiosos investigadores y universidades de todo el mundo están
               de acuerdo en que los consumidores habituales (y moderados) de
