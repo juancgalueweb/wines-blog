@@ -19,7 +19,7 @@ build-production:
 	cd server && $(MAKE) build-be
 
 run-production:
-	ENV=production docker-compose -f docker-compose-production.yml up
+	ENV=production docker-compose -f docker-compose-production.yml up -d
 
 #Digital Ocean VM
 # SSH_STRING:=root@142.93.53.152
