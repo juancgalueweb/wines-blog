@@ -253,7 +253,7 @@ export const WineForm = ({
             >
               <InputNumber min={180} max={16000} placeholder="750" />
             </Form.Item>
-            <span className="ant-form-text"> ml</span>
+            <span className="ant-form-text ms-1"> ml</span>
           </Form.Item>
 
           <Form.Item label="Grados alcohólicos">
@@ -270,7 +270,7 @@ export const WineForm = ({
             >
               <InputNumber min={0} max={45} placeholder="14.5" />
             </Form.Item>
-            <span className="ant-form-text">°</span>
+            <span className="ant-form-text ms-1">°</span>
           </Form.Item>
 
           <Form.Item label="Año de la cosecha">
@@ -346,7 +346,7 @@ export const WineForm = ({
                 parser={(value) => value.replace(/\./g, "")}
               />
             </Form.Item>
-            <span className="ant-form-text">CLP$</span>
+            <span className="ant-form-text ms-1">CLP$</span>
           </Form.Item>
 
           <Form.Item

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Form, Row, Col, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { LoginContext } from "../contexts/LoginContext";
@@ -41,7 +41,7 @@ export const UserFormAntd = (props) => {
   //Apis de registrar y login
   const { isLogin, setIsLogin } = useContext(LoginContext);
   const { setUser } = useContext(UserContext);
-  const history = useHistory();
+  const navigate = useNavigate();
   const KEY = "wines-app";
 
   //Registro de usuario
@@ -57,7 +57,7 @@ export const UserFormAntd = (props) => {
       }).then((result) => {
         if (result.isConfirmed) {
           setIsLogin(true);
-          history.push("/login");
+          navigate("/login");
         }
       });
       form.resetFields();
@@ -87,7 +87,7 @@ export const UserFormAntd = (props) => {
         timer: 2000,
       });
       setTimeout(() => {
-        history.push("/mis-vinos");
+        navigate("/mis-vinos");
       }, 2100);
     } catch (err) {
       // console.log(err);

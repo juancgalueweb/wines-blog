@@ -2,29 +2,29 @@ import React, { useContext } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserPlus,
-  faSignInAlt,
-  faWineGlassAlt,
-  faHome,
+  faRightToBracket,
+  faWineGlass,
+  faHouseChimney,
 } from "@fortawesome/free-solid-svg-icons";
 import wineGlass from "../images/filling-wine-glass.png";
 import { LoginContext } from "../contexts/LoginContext";
 
 export const Header = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { setIsLogin } = useContext(LoginContext);
 
   const handleRegister = () => {
     setIsLogin(false);
-    history.push("/register");
+    navigate("/register");
   };
 
   const handleLogin = () => {
     setIsLogin(true);
-    history.push("/login");
+    navigate("/login");
   };
 
   return (
@@ -44,11 +44,11 @@ export const Header = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/home">
-              <FontAwesomeIcon icon={faHome} className="me-2" />
+              <FontAwesomeIcon icon={faHouseChimney} className="me-2" />
               Home
             </Nav.Link>
             <Nav.Link href="/mis-vinos">
-              <FontAwesomeIcon icon={faWineGlassAlt} className="me-2" />
+              <FontAwesomeIcon icon={faWineGlass} className="me-2" />
               Ver mis vinos
             </Nav.Link>
           </Nav>
@@ -58,7 +58,7 @@ export const Header = () => {
               Registro
             </Nav.Link>
             <Nav.Link onClick={handleLogin} href="/login">
-              <FontAwesomeIcon icon={faSignInAlt} className="me-2" />
+              <FontAwesomeIcon icon={faRightToBracket} className="me-2" />
               Login
             </Nav.Link>
           </Nav>

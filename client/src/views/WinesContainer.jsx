@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button, Spin } from "antd";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { WineForm } from "../components/WineForm";
 import Swal from "sweetalert2";
@@ -25,7 +25,7 @@ export const WinesContainer = () => {
     imageOriginalName: "",
   };
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const [loaded, setLoaded] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const [initialData, setInitialData] = useState(startingData);
@@ -78,7 +78,7 @@ export const WinesContainer = () => {
         timer: 2000,
       });
       setTimeout(() => {
-        history.push("/mis-vinos");
+        navigate("/mis-vinos");
       }, 2100);
     } catch (err) {
       Swal.fire({
@@ -116,7 +116,7 @@ export const WinesContainer = () => {
         timer: 2000,
       });
       setTimeout(() => {
-        history.push("/mis-vinos");
+        navigate("/mis-vinos");
       }, 2100);
     } catch (err) {
       Swal.fire({
@@ -141,9 +141,9 @@ export const WinesContainer = () => {
 
   useEffect(() => {
     if (!user?._id) {
-      history.push("/login");
+      navigate("/login");
     }
-  }, [user, history]);
+  }, [user, navigate]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -159,7 +159,7 @@ export const WinesContainer = () => {
   const handleLogOut = () => {
     setUser(null);
     localStorage.clear();
-    history.push("/login");
+    navigate("/login");
   };
 
   return (
@@ -179,7 +179,7 @@ export const WinesContainer = () => {
           <Button
             type="primary"
             className="d-block"
-            onClick={() => history.push("/mis-vinos")}
+            onClick={() => navigate("/mis-vinos")}
           >
             Mis vinos
           </Button>

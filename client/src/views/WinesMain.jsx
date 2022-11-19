@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
-import "antd/dist/antd.css";
 import { Table, Image, Badge, Button, Rate, Modal } from "antd";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -20,7 +19,7 @@ export const WinesMain = () => {
   const { user, setUser } = useContext(UserContext);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
   const getWinesByUser = async () => {
@@ -83,9 +82,9 @@ export const WinesMain = () => {
 
   useEffect(() => {
     if (!user) {
-      history.push("/login");
+      navigate("/login");
     }
-  }, [user, history]);
+  }, [user, navigate]);
 
   useEffect(() => {
     if (user) {
@@ -98,7 +97,7 @@ export const WinesMain = () => {
   const handleLogOut = () => {
     setUser(null);
     localStorage.clear();
-    history.push("/login");
+    navigate("/login");
   };
 
   const tableProps = { loading };
@@ -235,7 +234,7 @@ export const WinesMain = () => {
           <>
             <EditOutlined
               style={{ color: "#F18F01", marginLeft: 5, fontSize: 18 }}
-              onClick={() => history.push(`/vino/${record._id}`)}
+              onClick={() => navigate(`/vino/${record._id}`)}
             />
             <DeleteOutlined
               style={{ color: "#E63F32", marginLeft: 16, fontSize: 18 }}
@@ -270,7 +269,7 @@ export const WinesMain = () => {
             <Button
               type="primary"
               className="d-block"
-              onClick={() => history.push("/nuevo-vino")}
+              onClick={() => navigate("/nuevo-vino")}
             >
               Registrar un vino
             </Button>

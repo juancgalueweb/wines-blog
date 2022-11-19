@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Header } from "../components/Header";
 import { HomeScreen } from "../views/HomeScreen";
 import { LoginRegisterScreen } from "../views/LoginRegisterScreen";
@@ -13,29 +8,17 @@ import { WinesMain } from "../views/WinesMain";
 
 export const AppRoutes = () => {
   return (
-    <Router>
+    <BrowserRouter>
       <Header />
-      <Switch>
-        <Redirect exact from="/" to="/home" />
-        <Route exact path="/home">
-          <HomeScreen />
-        </Route>
-        <Route exact path="/register">
-          <LoginRegisterScreen />
-        </Route>
-        <Route exact path="/login">
-          <LoginRegisterScreen />
-        </Route>
-        <Route exact path="/nuevo-vino">
-          <WinesContainer />
-        </Route>
-        <Route exact path="/vino/:id">
-          <WinesContainer />
-        </Route>
-        <Route exact path="/mis-vinos">
-          <WinesMain />
-        </Route>
-      </Switch>
-    </Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route exact path="/home" element={<HomeScreen />} />
+        <Route exact path="/register" element={<LoginRegisterScreen />} />
+        <Route exact path="/login" element={<LoginRegisterScreen />} />
+        <Route exact path="/nuevo-vino" element={<WinesContainer />} />
+        <Route exact path="/vino/:id" element={<WinesContainer />} />
+        <Route exact path="/mis-vinos" element={<WinesMain />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
