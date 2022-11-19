@@ -16,7 +16,7 @@ export const axiosWithToken = (endpoint, data, method = "GET") => {
     url,
     data,
     headers: {
-      "Content-type": "application/json",
+      "Content-Type": "application/json",
       "x-token": token,
     },
   });
@@ -30,7 +30,7 @@ export const axiosWithTokenImageUpload = (endpoint, data, method) => {
     url,
     data,
     headers: {
-      "Content-type": "multipart/form-data",
+      "Content-Type": "multipart/form-data",
       "x-token": token,
     },
   });
