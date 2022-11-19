@@ -1,14 +1,15 @@
-# FROM node:16-slim
-FROM node:fermium-alpine3.15
+FROM node:gallium-slim
+
+RUN npm i -g pnpm
 
 WORKDIR /usr/src/app
 
-COPY ./package.json ./
+COPY package.json pnpm-lock.yaml ./
 
-RUN npm install
+RUN pnpm install
 
 COPY . .
 
 EXPOSE 8000
 
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
