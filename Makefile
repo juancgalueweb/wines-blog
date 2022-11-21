@@ -21,11 +21,8 @@ build-production:
 run-production:
 	ENV=production docker-compose -f docker-compose-production.yml up -d
 
-#Digital Ocean VM
-# SSH_STRING:=root@142.93.53.152
-
 #Vultr VM
-SSH_STRING:=root@108.61.216.127
+SSH_STRING:=root@140.82.30.12
 ssh:
 	ssh $(SSH_STRING)
 
