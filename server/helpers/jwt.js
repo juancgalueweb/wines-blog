@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
-module.exports.genJWT = (userId, fullName, email) => {
+export default function genJWT(userId, fullName, email) {
   return new Promise((resolve, reject) => {
     const payload = { userId, fullName, email };
     jwt.sign(
@@ -16,4 +16,4 @@ module.exports.genJWT = (userId, fullName, email) => {
       }
     );
   });
-};
+}

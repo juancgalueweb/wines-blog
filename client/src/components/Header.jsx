@@ -10,7 +10,6 @@ import {
   faWineGlass,
   faHouseChimney,
 } from "@fortawesome/free-solid-svg-icons";
-import wineGlass from "../images/filling-wine-glass.png";
 import { LoginContext } from "../contexts/LoginContext";
 
 export const Header = () => {
@@ -32,8 +31,8 @@ export const Header = () => {
       <Container>
         <Navbar.Brand id="brand-text">
           <img
-            src={wineGlass}
-            alt="Imagen de una copa de vino"
+            src="/filling-wine-glass.png"
+            alt="Copa de vino"
             width="40"
             height="40"
             className="d-inline-block align-middle"

@@ -1,9 +1,9 @@
-const UserModel = require("../models/user.model");
-const bcrypt = require("bcryptjs");
-const { genJWT } = require("../helpers/jwt");
+import UserModel from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import genJWT from "../helpers/jwt.js";
 
 //Método para registrar un usario
-module.exports.registerUser = async (req, res) => {
+export async function registerUser(req, res) {
   try {
     const newUser = UserModel(req.body);
     //Encrypt password
@@ -16,10 +16,10 @@ module.exports.registerUser = async (req, res) => {
     const errorMsg = Object.values(err.errors).map((val) => val.message);
     res.status(500).json(errorMsg);
   }
-};
+}
 
 //Método para hacer el login de un usuario
-module.exports.loginUser = async (req, res) => {
+export async function loginUser(req, res) {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
     if (!user) {
@@ -41,4 +41,4 @@ module.exports.loginUser = async (req, res) => {
   } catch (err) {
     res.status(403).json({ msg: "Credenciales inválidas", err });
   }
-};
+}

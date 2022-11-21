@@ -1,17 +1,13 @@
-const WineModel = require("../models/wine.model");
-const {
-  uploadFile,
-  getObjectSignedUrl,
-  deleteObject,
-} = require("../helpers/s3");
-const crypto = require("crypto");
-const sharp = require("sharp");
+import WineModel from "../models/wine.model.js";
+import { uploadFile, getObjectSignedUrl, deleteObject } from "../helpers/s3.js";
+import crypto from "crypto";
+import sharp from "sharp";
 
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
 
 //Actualizar imagen en AWS s3 bucket
-module.exports.updateImage = async (req, res) => {
+export async function updateImage(req, res) {
   try {
     const key = req.params.key;
     const file = req.file;
@@ -35,10 +31,10 @@ module.exports.updateImage = async (req, res) => {
   } catch (err) {
     res.status(500).json({ msg: "Error al actualizar el archivo", err });
   }
-};
+}
 
 //Subir una imagen a AWS s3 bucket
-module.exports.uploadImage = async (req, res) => {
+export async function uploadImage(req, res) {
   try {
     const file = req.file;
     //* I had to use this function to properly get the filename in Spanish
@@ -62,10 +58,10 @@ module.exports.uploadImage = async (req, res) => {
   } catch (err) {
     res.status(500).json({ msg: "Error al subir el archivo", err });
   }
-};
+}
 
 //Encontrar imagen en el AWS s3 bucket
-module.exports.downloadImage = async (req, res) => {
+export async function downloadImage(req, res) {
   try {
     const key = req.params.key;
     const imageUrl = await getObjectSignedUrl(key);
@@ -75,10 +71,10 @@ module.exports.downloadImage = async (req, res) => {
       .status(500)
       .json({ msg: "Error al buscar imagen por su key en el AWS s3" });
   }
-};
+}
 
 //Borrar imagen en el AWS s3 bucket
-module.exports.deleteImageFile = async (req, res) => {
+export async function deleteImageFile(req, res) {
   try {
     const key = req.params.key;
     await deleteObject(key);
@@ -89,20 +85,20 @@ module.exports.deleteImageFile = async (req, res) => {
   } catch (error) {
     res.status(500).json({ msg: "Error al borrar la image del AWS s3" });
   }
-};
+}
 
 //Crear una reseña de vino
-module.exports.addWine = async (req, res) => {
+export async function addWine(req, res) {
   try {
     const wine = await WineModel.create(req.body);
     return res.json({ msg: "Vino registrado con éxito", wine });
   } catch (err) {
     res.status(500).json({ msg: "Error al crear el vino", err });
   }
-};
+}
 
 //Consultar todos los vinos creados por usuario
-module.exports.getWinesByUser = async (req, res) => {
+export async function getWinesByUser(req, res) {
   try {
     const winesUser = await WineModel.find({ author: req.params.id });
     return res.json(winesUser);
@@ -111,20 +107,20 @@ module.exports.getWinesByUser = async (req, res) => {
       .status(500)
       .json({ msg: "Error al obtener los vinos por el usuario", err });
   }
-};
+}
 
 //Encontrar un vino por el ID del vino
-module.exports.getWineById = async (req, res) => {
+export async function getWineById(req, res) {
   try {
     const singleWine = await WineModel.findById({ _id: req.params.id });
     return res.json(singleWine);
   } catch (err) {
     res.status(500).json({ msg: "Error al obtener el vino por su ID", err });
   }
-};
+}
 
 //Borrar un vino por el ID del vino
-module.exports.deleteWineById = async (req, res) => {
+export async function deleteWineById(req, res) {
   try {
     const wineToDelete = await WineModel.findById({ _id: req.params.id });
     if (wineToDelete.imageUrl !== "") {
@@ -135,10 +131,10 @@ module.exports.deleteWineById = async (req, res) => {
   } catch (err) {
     res.status(500).json({ msg: "Error al borrar el vino", err });
   }
-};
+}
 
 //Actualizar un vino por su ID
-module.exports.updateWineById = async (req, res) => {
+export async function updateWineById(req, res) {
   try {
     const updatedWine = await WineModel.findOneAndUpdate(
       { _id: req.params.id },
@@ -152,4 +148,4 @@ module.exports.updateWineById = async (req, res) => {
   } catch (err) {
     res.status(500).json({ msg: "Error al editar el vino", err });
   }
-};
+}

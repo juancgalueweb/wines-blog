@@ -1,10 +1,10 @@
-const {
+import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
   DeleteObjectCommand,
-} = require("@aws-sdk/client-s3");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
@@ -20,7 +20,7 @@ const s3Client = new S3Client({
 });
 
 // Uploads a file to s3
-module.exports.uploadFile = (fileBuffer, fileName, mimetype) => {
+export function uploadFile(fileBuffer, fileName, mimetype) {
   const uploadParms = {
     Bucket: bucketName,
     Body: fileBuffer,
@@ -28,10 +28,10 @@ module.exports.uploadFile = (fileBuffer, fileName, mimetype) => {
     contentType: mimetype,
   };
   return s3Client.send(new PutObjectCommand(uploadParms));
-};
+}
 
 // Downloads a file from AWS s3
-module.exports.getObjectSignedUrl = async (key) => {
+export async function getObjectSignedUrl(key) {
   const params = {
     Key: key,
     Bucket: bucketName,
@@ -41,14 +41,14 @@ module.exports.getObjectSignedUrl = async (key) => {
   const seconds = 86400; //1 día en segundos
   const url = await getSignedUrl(s3Client, command, { expiresIn: seconds });
   return url;
-};
+}
 
 // Delete an object (file) from AWS s3
-module.exports.deleteObject = async (key) => {
+export async function deleteObject(key) {
   const params = {
     Key: key,
     Bucket: bucketName,
   };
 
   await s3Client.send(new DeleteObjectCommand(params));
-};
+}

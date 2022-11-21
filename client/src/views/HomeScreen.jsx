@@ -1,14 +1,18 @@
 import React from "react";
 import { Carousel } from "antd";
-import slice1 from "../images/carrusel1.jpeg";
-import slice2 from "../images/carrusel2.jpg";
-import slice3 from "../images/carrusel3.jpg";
-import slice4 from "../images/carrusel4.jpg";
 import { Card, Col, Row } from "antd";
 import { Layout } from "antd";
 import { Footer } from "../components/Footer";
+import { v4 as uuidv4 } from "uuid";
 
 const { Content } = Layout;
+
+const images = [
+  { imageUrl: "/carrusel1.jpeg", alt: "Carrusel uno" },
+  { imageUrl: "/carrusel2.jpg", alt: "Carrusel dos" },
+  { imageUrl: "/carrusel3.jpg", alt: "Carrusel tres" },
+  { imageUrl: "/carrusel4.jpg", alt: "Carrusel cuatro" },
+];
 
 export const HomeScreen = () => {
   return (
@@ -23,35 +27,16 @@ export const HomeScreen = () => {
           todo, <strong>es gratis.</strong>{" "}
         </Content>
       </Layout>
-      <Carousel autoplay effect="fade">
-        <div>
-          <img
-            src={slice1}
-            alt="Imagen carrusel 1"
-            className="image-carousel"
-          />
-        </div>
-        <div>
-          <img
-            src={slice2}
-            alt="Imagen carrusel 2"
-            className="image-carousel"
-          />
-        </div>
-        <div>
-          <img
-            src={slice3}
-            alt="Imagen carrusel 3"
-            className="image-carousel"
-          />
-        </div>
-        <div>
-          <img
-            src={slice4}
-            alt="Imagen carrusel 3"
-            className="image-carousel"
-          />
-        </div>
+      <Carousel autoplay effect="fade" pauseOnHover={false}>
+        {images.map((image) => (
+          <div key={uuidv4()}>
+            <img
+              src={image.imageUrl}
+              alt={image.alt}
+              className="image-carousel"
+            />
+          </div>
+        ))}
       </Carousel>
       <h1 className="text-dark text-center pt-3">Beneficios de tomar vino</h1>
       <div className="my-container">

@@ -1,5 +1,5 @@
-const uniqueValidator = require("mongoose-unique-validator");
-const { Schema, model } = require("mongoose");
+import uniqueValidator from "mongoose-unique-validator";
+import { Schema, model } from "mongoose";
 
 const UserSchema = new Schema(
   {
@@ -35,4 +35,4 @@ UserSchema.plugin(uniqueValidator, { message: "{PATH} debe ser único" });
 
 //Convertir el esquema en modelo y exportarlo
 const UserModel = model("User model", UserSchema);
-module.exports = UserModel;
+export default UserModel;

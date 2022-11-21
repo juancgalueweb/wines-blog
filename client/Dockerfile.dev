@@ -12,6 +12,6 @@ COPY . .
 
 EXPOSE 3000
 
-ENV REACT_APP_BASE_URL=http://localhost:8000/api
+ENV VITE_BASE_URL=http://localhost:8000/api
 
-CMD ["pnpm", "start"]
+CMD ["pnpm", "vite"]

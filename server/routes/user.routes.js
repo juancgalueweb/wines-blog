@@ -1,11 +1,9 @@
-const {
-  registerUser,
-  loginUser,
-  logout,
-} = require("../controllers/user.controllers");
+import { Router } from "express";
+import { registerUser, loginUser } from "../controllers/user.controllers.js";
 
-module.exports = (app) => {
-  app.post("/api/auth/register", registerUser);
-  app.post("/api/auth/login", loginUser);
-  // app.post("/api/auth/logout", logout);
-};
+const UserRouter = Router();
+
+UserRouter.post("/api/auth/register", registerUser);
+UserRouter.post("/api/auth/login", loginUser);
+
+export default UserRouter;

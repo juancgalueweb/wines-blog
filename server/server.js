@@ -1,13 +1,15 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
+import UserRouter from "./routes/user.routes.js";
+import WineRouter from "./routes/wine.routes.js";
+
 const app = express();
 
 //Using dotenv
-// require("dotenv").config({ path: "./config/.env.dev" });
-require("dotenv").config();
+import "dotenv/config";
 
 //Mongoose config
-require("./config/mongoose.config");
+import "./config/mongoose.config.js";
 
 //Using cors
 app.use(cors());
@@ -17,8 +19,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //Calling all routes
-require("./routes/user.routes")(app);
-require("./routes/wine.routes")(app);
+app.use(UserRouter);
+app.use(WineRouter);
 
 //Using the port
 const PORT = 8000;

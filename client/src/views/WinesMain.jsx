@@ -7,7 +7,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { axiosWithToken } from "../helpers/axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import noImage from "../images/no-image.png";
 import { thousandSeparator } from "../helpers/thousandSeparator";
 import { uniqueArrayData } from "../helpers/uniqueArrayData";
 import Swal from "sweetalert2";
@@ -223,7 +222,7 @@ export const WinesMain = () => {
       title: "Img",
       dataIndex: "imageUrl",
       render: (record) => {
-        return <Image width={30} src={!record ? noImage : record} />;
+        return <Image width={30} src={!record ? "/no-image.png" : record} />;
       },
     },
     {

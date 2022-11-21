@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+import { Schema, model } from "mongoose";
 
 const WineSchema = new Schema(
   {
@@ -66,4 +65,4 @@ const WineSchema = new Schema(
 
 //Convertir el esquema en modelo y exportarlo
 const WineModel = model("Wine model", WineSchema);
-module.exports = WineModel;
+export default WineModel;
