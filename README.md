@@ -71,7 +71,7 @@ AWS_SECRET_KEY="LLAVE_SECRETA_DE_AWS"
 En la carpeta `client`, debes crear un `.env.development`, con la siguiente data:
 
 ```
-REACT_APP_BASE_URL=http://localhost:8000/api
+VITE_BASE_URL=http://localhost:8000/api
 ```
 
 Usamos el puerto 8000, porque en la ruta `server/server.js` definimos que ese era nuestro número de puerto.
