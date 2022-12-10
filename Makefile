@@ -21,8 +21,8 @@ build-production:
 run-production:
 	ENV=production docker-compose -f docker-compose-production.yml up -d
 
-#Vultr VM
-SSH_STRING:=root@45.32.77.87
+#Linode VM
+SSH_STRING:=root@66.228.58.174
 ssh:
 	ssh $(SSH_STRING)
 
