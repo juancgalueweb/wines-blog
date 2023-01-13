@@ -1,10 +1,10 @@
-import WineModel from "../models/wine.model.js";
-import { uploadFile, getObjectSignedUrl, deleteObject } from "../helpers/s3.js";
-import crypto from "crypto";
-import sharp from "sharp";
+import crypto from 'crypto';
+import sharp from 'sharp';
+import { deleteObject, getObjectSignedUrl, uploadFile } from '../helpers/s3.js';
+import WineModel from '../models/wine.model.js';
 
 const generateFileName = (bytes = 32) =>
-  crypto.randomBytes(bytes).toString("hex");
+  crypto.randomBytes(bytes).toString('hex');
 
 //Actualizar imagen en AWS s3 bucket
 export async function updateImage(req, res) {
@@ -12,24 +12,24 @@ export async function updateImage(req, res) {
     const key = req.params.key;
     const file = req.file;
     //* I had to use this function to properly get the filename in Spanish
-    const fileName = Buffer.from(file.originalname, "latin1").toString("utf8");
+    const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
     const fileBuffer = await sharp(file.buffer)
       .resize({
         height: 1920,
         width: 1080,
-        fit: "contain",
+        fit: 'contain',
         background: { r: 255, g: 255, b: 255, alpha: 0 },
       })
       .toBuffer();
     await uploadFile(fileBuffer, key, file.mimetype);
     return res.status(200).json({
-      status: "success",
-      msg: "Archivo actualizado con éxito!",
+      status: 'success',
+      msg: 'Archivo actualizado con éxito!',
       imageName: key,
       originalName: fileName,
     });
   } catch (err) {
-    res.status(500).json({ msg: "Error al actualizar el archivo", err });
+    res.status(500).json({ msg: 'Error al actualizar el archivo', err });
   }
 }
 
@@ -38,25 +38,25 @@ export async function uploadImage(req, res) {
   try {
     const file = req.file;
     //* I had to use this function to properly get the filename in Spanish
-    const fileName = Buffer.from(file.originalname, "latin1").toString("utf8");
+    const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
     const imageName = generateFileName();
     const fileBuffer = await sharp(file.buffer)
       .resize({
         height: 1920,
         width: 1080,
-        fit: "contain",
+        fit: 'contain',
         background: { r: 255, g: 255, b: 255, alpha: 0 },
       })
       .toBuffer();
     await uploadFile(fileBuffer, imageName, file.mimetype);
     return res.status(200).json({
-      status: "success",
-      msg: "Archivo subido con éxito!",
+      status: 'success',
+      msg: 'Archivo subido con éxito!',
       imageName: imageName,
       originalName: fileName,
     });
   } catch (err) {
-    res.status(500).json({ msg: "Error al subir el archivo", err });
+    res.status(500).json({ msg: 'Error al subir el archivo', err });
   }
 }
 
@@ -69,7 +69,7 @@ export async function downloadImage(req, res) {
   } catch (err) {
     res
       .status(500)
-      .json({ msg: "Error al buscar imagen por su key en el AWS s3" });
+      .json({ msg: 'Error al buscar imagen por su key en el AWS s3' });
   }
 }
 
@@ -79,11 +79,11 @@ export async function deleteImageFile(req, res) {
     const key = req.params.key;
     await deleteObject(key);
     return res.json({
-      status: "success",
-      msg: "Imagen borrada satisfactoriamente",
+      status: 'success',
+      msg: 'Imagen borrada satisfactoriamente',
     });
   } catch (error) {
-    res.status(500).json({ msg: "Error al borrar la image del AWS s3" });
+    res.status(500).json({ msg: 'Error al borrar la image del AWS s3' });
   }
 }
 
@@ -91,9 +91,9 @@ export async function deleteImageFile(req, res) {
 export async function addWine(req, res) {
   try {
     const wine = await WineModel.create(req.body);
-    return res.json({ msg: "Vino registrado con éxito", wine });
+    return res.json({ msg: 'Vino registrado con éxito', wine });
   } catch (err) {
-    res.status(500).json({ msg: "Error al crear el vino", err });
+    res.status(500).json({ msg: 'Error al crear el vino', err });
   }
 }
 
@@ -105,7 +105,7 @@ export async function getWinesByUser(req, res) {
   } catch (err) {
     res
       .status(500)
-      .json({ msg: "Error al obtener los vinos por el usuario", err });
+      .json({ msg: 'Error al obtener los vinos por el usuario', err });
   }
 }
 
@@ -115,7 +115,7 @@ export async function getWineById(req, res) {
     const singleWine = await WineModel.findById({ _id: req.params.id });
     return res.json(singleWine);
   } catch (err) {
-    res.status(500).json({ msg: "Error al obtener el vino por su ID", err });
+    res.status(500).json({ msg: 'Error al obtener el vino por su ID', err });
   }
 }
 
@@ -123,13 +123,13 @@ export async function getWineById(req, res) {
 export async function deleteWineById(req, res) {
   try {
     const wineToDelete = await WineModel.findById({ _id: req.params.id });
-    if (wineToDelete.imageUrl !== "") {
+    if (wineToDelete.imageUrl !== '') {
       await deleteObject(wineToDelete.imageUrl);
     }
     await WineModel.deleteOne({ _id: req.params.id });
-    return res.json({ msg: "Vino borrado satisfactoriamente" });
+    return res.json({ msg: 'Vino borrado satisfactoriamente' });
   } catch (err) {
-    res.status(500).json({ msg: "Error al borrar el vino", err });
+    res.status(500).json({ msg: 'Error al borrar el vino', err });
   }
 }
 
@@ -144,8 +144,8 @@ export async function updateWineById(req, res) {
         runValidators: true,
       }
     );
-    return res.json({ msg: "Vino modificado exitosamente", updatedWine });
+    return res.json({ msg: 'Vino modificado exitosamente', updatedWine });
   } catch (err) {
-    res.status(500).json({ msg: "Error al editar el vino", err });
+    res.status(500).json({ msg: 'Error al editar el vino', err });
   }
 }

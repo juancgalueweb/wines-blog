@@ -6,7 +6,6 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from '../contexts/UserContext';
 import { axiosWithToken } from '../helpers/axios';
 import { thousandSeparator } from '../helpers/thousandSeparator';
@@ -28,9 +27,13 @@ export const WinesMain = () => {
         let response;
         if (row.imageUrl !== '') {
           response = await axiosWithToken(`getFile/${row.imageUrl}`);
-          return { ...row, imageUrl: response.data.imageUrl, key: uuidv4() };
+          return {
+            ...row,
+            imageUrl: response.data.imageUrl,
+            key: row._id.toString(),
+          };
         } else {
-          return { ...row, key: uuidv4() };
+          return { ...row, key: row._id.toString() };
         }
       });
       const result = await Promise.all(promises);

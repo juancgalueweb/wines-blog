@@ -1,5 +1,5 @@
 # First stage
-FROM node:gallium-slim AS builder
+FROM node:gallium-bullseye AS builder
 
 RUN npm i -g pnpm
 

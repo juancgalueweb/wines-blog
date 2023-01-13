@@ -1,4 +1,4 @@
-FROM node:gallium-slim
+FROM node:gallium-bullseye
 
 RUN npm i -g pnpm
 

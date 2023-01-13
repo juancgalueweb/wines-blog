@@ -19,7 +19,7 @@ build-production:
 	cd server && $(MAKE) build-be
 
 run-production:
-	ENV=production docker-compose -f docker-compose-production.yml up -d
+	ENV=production docker-compose -f docker-compose-production.yml up
 
 #Linode VM
 SSH_STRING:=root@66.228.58.174
