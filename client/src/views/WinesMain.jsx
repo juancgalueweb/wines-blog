@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
-import { Table, Image, Badge, Button, Rate, Modal } from "antd";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { axiosWithToken } from "../helpers/axios";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { thousandSeparator } from "../helpers/thousandSeparator";
-import { uniqueArrayData } from "../helpers/uniqueArrayData";
-import Swal from "sweetalert2";
-import { v4 as uuidv4 } from "uuid";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Badge, Button, Image, Modal, Rate, Table } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { v4 as uuidv4 } from 'uuid';
+import { UserContext } from '../contexts/UserContext';
+import { axiosWithToken } from '../helpers/axios';
+import { thousandSeparator } from '../helpers/thousandSeparator';
+import { uniqueArrayData } from '../helpers/uniqueArrayData';
 
 export const WinesMain = () => {
   const [wines, setWines] = useState([]);
@@ -26,7 +26,7 @@ export const WinesMain = () => {
       const winesData = await axiosWithToken(`wines/${user._id}`);
       const promises = winesData.data.map(async (row) => {
         let response;
-        if (row.imageUrl !== "") {
+        if (row.imageUrl !== '') {
           response = await axiosWithToken(`getFile/${row.imageUrl}`);
           return { ...row, imageUrl: response.data.imageUrl, key: uuidv4() };
         } else {
@@ -39,7 +39,7 @@ export const WinesMain = () => {
       setLoading(false);
     } catch (err) {
       Swal.fire({
-        icon: "error",
+        icon: 'error',
         title: `${err.response.data.msg}`,
         showConfirmButton: false,
         timer: 2000,
@@ -54,11 +54,11 @@ export const WinesMain = () => {
   const deleteWine = (record) => {
     const executeDelete = async () => {
       try {
-        await axiosWithToken(`wine/delete/${record._id}`, {}, "DELETE");
+        await axiosWithToken(`wine/delete/${record._id}`, {}, 'DELETE');
         setWines(wines.filter((wine) => wine._id !== record._id));
       } catch (err) {
         Swal.fire({
-          icon: "error",
+          icon: 'error',
           title: `${err.response.data.msg}`,
           showConfirmButton: false,
           timer: 2000,
@@ -71,8 +71,8 @@ export const WinesMain = () => {
 
     Modal.confirm({
       title: `¿Seguero que quiere borrar el vino ${record.brand} ${record.type} ${record.variety}?`,
-      okText: "Yes",
-      okType: "danger",
+      okText: 'Yes',
+      okType: 'danger',
       onOk: () => {
         executeDelete();
       },
@@ -81,7 +81,7 @@ export const WinesMain = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate("/login");
+      navigate('/login');
     }
   }, [user, navigate]);
 
@@ -96,7 +96,7 @@ export const WinesMain = () => {
   const handleLogOut = () => {
     setUser(null);
     localStorage.clear();
-    navigate("/login");
+    navigate('/login');
   };
 
   const tableProps = { loading };
@@ -104,94 +104,94 @@ export const WinesMain = () => {
   //Definiendo las columnas de la tabla de Ant Design
   const columns = [
     {
-      key: "1",
-      title: "Marca",
-      dataIndex: "brand",
-      filters: uniqueArrayData(wines, "brand").map((brand) => ({
+      key: '1',
+      title: 'Marca',
+      dataIndex: 'brand',
+      filters: uniqueArrayData(wines, 'brand').map((brand) => ({
         text: brand,
         value: brand,
       })),
       onFilter: (value, record) => record.brand.indexOf(value) === 0,
     },
     {
-      key: "2",
-      title: "Tipo",
-      dataIndex: "type",
-      filters: uniqueArrayData(wines, "type").map((wineType) => ({
+      key: '2',
+      title: 'Tipo',
+      dataIndex: 'type',
+      filters: uniqueArrayData(wines, 'type').map((wineType) => ({
         text: wineType,
         value: wineType,
       })),
       onFilter: (value, record) => record.type.indexOf(value) === 0,
       render: (record) => {
         return (
-          <span style={{ textAlign: "center" }}>
-            {record === "LateHarvest" ? "Late Harvest" : record}
+          <span style={{ textAlign: 'center' }}>
+            {record === 'LateHarvest' ? 'Late Harvest' : record}
           </span>
         );
       },
     },
     {
-      key: "3",
-      title: "Cepa",
-      dataIndex: "variety",
-      filters: uniqueArrayData(wines, "variety").map((wineCepa) => ({
+      key: '3',
+      title: 'Cepa',
+      dataIndex: 'variety',
+      filters: uniqueArrayData(wines, 'variety').map((wineCepa) => ({
         text: wineCepa,
         value: wineCepa,
       })),
       onFilter: (value, record) => record.variety.indexOf(value) === 0,
     },
     {
-      key: "4",
-      title: "Origen",
-      dataIndex: "origin",
-      filters: uniqueArrayData(wines, "origin").map((origin) => ({
+      key: '4',
+      title: 'Origen',
+      dataIndex: 'origin',
+      filters: uniqueArrayData(wines, 'origin').map((origin) => ({
         text: origin,
         value: origin,
       })),
       onFilter: (value, record) => record.origin.indexOf(value) === 0,
     },
     {
-      key: "5",
-      title: "Botella (ml)",
-      dataIndex: "bottleCapacity",
+      key: '5',
+      title: 'Botella (ml)',
+      dataIndex: 'bottleCapacity',
       sorter: (a, b) => a.bottleCapacity - b.bottleCapacity,
       render: (record) => {
         return (
-          <span style={{ textAlign: "right", display: "block" }}>
+          <span style={{ textAlign: 'right', display: 'block' }}>
             {thousandSeparator(record)}
           </span>
         );
       },
     },
     {
-      key: "6",
-      title: "alc.",
-      dataIndex: "alcoholicStrength",
+      key: '6',
+      title: 'alc.',
+      dataIndex: 'alcoholicStrength',
       sorter: (a, b) => a.alcoholicStrength - b.alcoholicStrength,
     },
     {
-      key: "7",
-      title: "Año",
-      dataIndex: "year",
+      key: '7',
+      title: 'Año',
+      dataIndex: 'year',
       sorter: (a, b) => a.year - b.year,
     },
     {
-      key: "8",
-      title: "Clasif.",
-      dataIndex: "classification",
-      filters: uniqueArrayData(wines, "classification").map((classif) => ({
+      key: '8',
+      title: 'Clasif.',
+      dataIndex: 'classification',
+      filters: uniqueArrayData(wines, 'classification').map((classif) => ({
         text: classif,
         value: classif,
       })),
       onFilter: (value, record) => record.classification.indexOf(value) === 0,
     },
     {
-      key: "9",
-      title: "Rating",
-      dataIndex: "rating",
-      width: "15%",
-      align: "center",
-      filters: uniqueArrayData(wines, "rating")
+      key: '9',
+      title: 'Rating',
+      dataIndex: 'rating',
+      width: '15%',
+      align: 'center',
+      filters: uniqueArrayData(wines, 'rating')
         .sort((a, b) => b - a)
         .map((rate) => ({
           text: <Rate allowHalf disabled defaultValue={rate} />,
@@ -205,38 +205,39 @@ export const WinesMain = () => {
       },
     },
     {
-      key: "10",
-      title: "Precio (CLP)",
-      dataIndex: "price",
+      key: '10',
+      title: 'Precio (CLP)',
+      dataIndex: 'price',
       sorter: (a, b) => a.price - b.price,
       render: (record) => {
         return (
-          <span style={{ textAlign: "right", display: "block" }}>
+          <span style={{ textAlign: 'right', display: 'block' }}>
             {thousandSeparator(record)}
           </span>
         );
       },
     },
     {
-      key: "11",
-      title: "Img",
-      dataIndex: "imageUrl",
+      key: '11',
+      title: 'Img',
+      dataIndex: 'imageUrl',
       render: (record) => {
-        return <Image width={30} src={!record ? "/no-image.png" : record} />;
+        return <Image width={30} src={!record ? '/no-image.png' : record} />;
       },
     },
     {
-      key: "12",
-      title: "Acciones",
+      key: '12',
+      title: 'Acciones',
+      width: 50,
       render: (record) => {
         return (
           <>
             <EditOutlined
-              style={{ color: "#F18F01", marginLeft: 5, fontSize: 18 }}
+              style={{ color: '#F18F01', marginLeft: 5, fontSize: 18 }}
               onClick={() => navigate(`/vino/${record._id}`)}
             />
             <DeleteOutlined
-              style={{ color: "#E63F32", marginLeft: 16, fontSize: 18 }}
+              style={{ color: '#E63F32', marginLeft: 16, fontSize: 18 }}
               onClick={() => {
                 deleteWine(record);
               }}
@@ -250,25 +251,25 @@ export const WinesMain = () => {
   return (
     <>
       <Container
-        className="my-3 mx-auto shadow rounded px-4 py-3"
-        id="my-container"
+        className='my-3 mx-auto shadow rounded px-4 py-3'
+        id='my-container'
       >
         <Row>
           <Col>
-            <p className="text-end">Hola, {user?.fullName}</p>
+            <p className='text-end'>Hola, {user?.fullName}</p>
             <Button
-              type="primary"
+              type='primary'
               danger
-              className="float-end"
+              className='float-end'
               onClick={handleLogOut}
             >
               Cerrar sesión
             </Button>
             <br />
             <Button
-              type="primary"
-              className="d-block"
-              onClick={() => navigate("/nuevo-vino")}
+              type='primary'
+              className='d-block'
+              onClick={() => navigate('/nuevo-vino')}
             >
               Registrar un vino
             </Button>
@@ -276,9 +277,9 @@ export const WinesMain = () => {
         </Row>
         <Row>
           <Col>
-            <h2 className="text-center wine-color">Mis vinos</h2>
+            <h2 className='text-center wine-color'>Mis vinos</h2>
             {loaded && wines.length === 0 ? (
-              <p className="text-center fs-4 wine-color">
+              <p className='text-center fs-4 wine-color'>
                 No hay vinos registrados. Anímese a registrar su primer vino
                 🍷👏🏼
               </p>
@@ -286,8 +287,8 @@ export const WinesMain = () => {
               <>
                 <div>
                   <p
-                    className="nice-red-color"
-                    style={{ display: "inline-block", marginRight: "7px" }}
+                    className='nice-red-color'
+                    style={{ display: 'inline-block', marginRight: '7px' }}
                   >
                     Total de vinos registrados
                   </p>
