@@ -24,7 +24,6 @@ export const HomeScreen = () => {
           todo, <strong>es gratis.</strong>{' '}
         </Content>
       </Layout>
-      {/* Carousel for production */}
       <Carousel autoplay effect='fade' pauseOnHover={false}>
         {images.map((image) => (
           <div key={image.alt}>

@@ -222,7 +222,9 @@ export const WinesMain = () => {
       title: 'Img',
       dataIndex: 'imageUrl',
       render: (record) => {
-        return <Image width={30} src={!record ? '/no-image.png' : record} />;
+        return (
+          <Image width={30} src={!record ? 'images/no-image.png' : record} />
+        );
       },
     },
     {
