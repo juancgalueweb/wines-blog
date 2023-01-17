@@ -17,7 +17,8 @@ ENV VITE_BASE_URL=${BASE_URL}
 RUN pnpm build
 
 # Second stage
-FROM caddy:2.1.1
+# FROM caddy:2.1.1
+FROM caddy:2.6.2-alpine
 
 ARG CADDYFILE
 COPY ${CADDYFILE} /etc/caddy/Caddyfile
