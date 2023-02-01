@@ -1,6 +1,6 @@
-import { UploadOutlined } from '@ant-design/icons';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UploadOutlined } from '@ant-design/icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   Alert,
   Button,
@@ -12,108 +12,108 @@ import {
   Rate,
   Row,
   Select,
-  Upload,
-} from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { winesOptions } from '../data/winesOptions';
-import { axiosWithToken, axiosWithTokenImageUpload } from '../helpers/axios';
+  Upload
+} from 'antd'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { winesOptions } from '../data/winesOptions'
+import { axiosWithToken, axiosWithTokenImageUpload } from '../helpers/axios'
 
-const { Option } = Select;
+const { Option } = Select
 const formItemLayout = {
   labelCol: {
-    span: 6,
+    span: 6
   },
   wrapperCol: {
-    span: 14,
-  },
-};
+    span: 14
+  }
+}
 
 export const WineForm = ({
   processSubmit,
   initialValues,
   titleButton,
   getImgName,
-  getFileName,
+  getFileName
 }) => {
-  const [list, setList] = useState('');
-  const [subList, setSubList] = useState('');
-  const [fileList, setFileList] = useState([]);
-  const [uploading, setUploading] = useState(false);
-  const [uploaded, setUploaded] = useState(false);
-  const [uploadResponseMsg, setUploadResponseMsg] = useState('');
-  const location = useLocation();
-  const [done, setDone] = useState(false);
-  const [secureUrl, setSecureUrl] = useState('');
-  const [imageDeleted, setImageDeleted] = useState(false);
-  const [deletedMsg, setDeletedMsg] = useState('');
+  const [list, setList] = useState('')
+  const [subList, setSubList] = useState('')
+  const [fileList, setFileList] = useState([])
+  const [uploading, setUploading] = useState(false)
+  const [uploaded, setUploaded] = useState(false)
+  const [uploadResponseMsg, setUploadResponseMsg] = useState('')
+  const location = useLocation()
+  const [done, setDone] = useState(false)
+  const [secureUrl, setSecureUrl] = useState('')
+  const [imageDeleted, setImageDeleted] = useState(false)
+  const [deletedMsg, setDeletedMsg] = useState('')
 
-  const [form] = Form.useForm();
-  let uploadResponse;
-  const handleChangeType = (value) => {
-    setList(value);
-    setSubList('');
+  const [form] = Form.useForm()
+  let uploadResponse
+  const handleChangeType = value => {
+    setList(value)
+    setSubList('')
     form.setFieldsValue({
-      variety: '',
-    });
-  };
+      variety: ''
+    })
+  }
 
-  const handleChangeVariety = (value) => {
-    setSubList(value);
-  };
+  const handleChangeVariety = value => {
+    setSubList(value)
+  }
 
-  const getFile = (e) => {
+  const getFile = e => {
     if (Array.isArray(e)) {
-      return e;
+      return e
     }
-    return e && e?.fileList;
-  };
+    return e && e?.fileList
+  }
 
   const getSignedUrl = async () => {
     if (initialValues?.imageUrl !== '') {
-      getImgName(initialValues?.imageUrl);
-      getFileName(initialValues?.imageOriginalName);
+      getImgName(initialValues?.imageUrl)
+      getFileName(initialValues?.imageOriginalName)
       const response = await axiosWithToken(
         `getFile/${initialValues?.imageUrl}`
-      );
-      setSecureUrl(response.data.imageUrl);
-      setDone(true);
+      )
+      setSecureUrl(response.data.imageUrl)
+      setDone(true)
     }
-  };
+  }
 
   const handleUpload = async () => {
     try {
-      const formData = new FormData();
-      fileList.forEach((file) => {
-        formData.append('file', file);
-      });
-      setUploading(true);
+      const formData = new FormData()
+      fileList.forEach(file => {
+        formData.append('file', file)
+      })
+      setUploading(true)
       if (initialValues.imageUrl === '') {
         uploadResponse = await axiosWithTokenImageUpload(
           'uploadSingleFile',
           formData,
           'POST'
-        );
-        getImgName(uploadResponse.data.imageName);
-        getFileName(uploadResponse.data.originalName);
+        )
+        getImgName(uploadResponse.data.imageName)
+        getFileName(uploadResponse.data.originalName)
       } else {
         uploadResponse = await axiosWithTokenImageUpload(
           `updateSingleFile/${initialValues.imageUrl}`,
           formData,
           'POST'
-        );
-        getImgName(uploadResponse.data.imageName);
-        getFileName(uploadResponse.data.originalName);
+        )
+        getImgName(uploadResponse.data.imageName)
+        getFileName(uploadResponse.data.originalName)
       }
-      setFileList([]);
-      setUploaded(true);
-      setUploadResponseMsg(uploadResponse.data.msg);
-      setUploading(false);
+      setFileList([])
+      setUploaded(true)
+      setUploadResponseMsg(uploadResponse.data.msg)
+      setUploading(false)
     } catch (err) {
-      setUploaded(false);
-      setUploadResponseMsg(err.response.data.msg);
+      setUploaded(false)
+      setUploadResponseMsg(err.response.data.msg)
     }
-  };
+  }
 
   const deleteImageFromS3 = async () => {
     try {
@@ -121,42 +121,42 @@ export const WineForm = ({
         `deleteImageFile/${initialValues.imageUrl}`,
         {},
         'DELETE'
-      );
-      setDeletedMsg(deleteResponse.data.msg);
-      setImageDeleted(true);
-      getImgName('');
-      getFileName('');
+      )
+      setDeletedMsg(deleteResponse.data.msg)
+      setImageDeleted(true)
+      getImgName('')
+      getFileName('')
     } catch (error) {
       console.log(
         '🚀 ~ file: WineForm.jsx ~ line 129 ~ deleteImageFromS3 ~ error',
         error
-      );
+      )
     }
-  };
+  }
 
   const props = {
-    onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
+    onRemove: file => {
+      const index = fileList.indexOf(file)
+      const newFileList = fileList.slice()
+      newFileList.splice(index, 1)
+      setFileList(newFileList)
     },
-    beforeUpload: (file) => {
-      setFileList([...fileList, file]);
-      return false;
+    beforeUpload: file => {
+      setFileList([...fileList, file])
+      return false
     },
     headers: {
-      authorization: 'authorization-text',
-    },
-  };
+      authorization: 'authorization-text'
+    }
+  }
 
   useEffect(() => {
-    setList(initialValues.type);
-    setSubList(initialValues.variety);
+    setList(initialValues.type)
+    setSubList(initialValues.variety)
     if (location.pathname !== '/nuevo-vino') {
-      getSignedUrl();
+      getSignedUrl()
     }
-  }, []); //eslint-disable-line react-hooks/exhaustive-deps
+  }, []) //eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Row>
@@ -177,8 +177,8 @@ export const WineForm = ({
             rules={[
               {
                 required: true,
-                message: 'Por favor, ingrese una marca de vino',
-              },
+                message: 'Por favor, ingrese una marca de vino'
+              }
             ]}
           >
             <Input />
@@ -190,8 +190,8 @@ export const WineForm = ({
             rules={[
               {
                 required: true,
-                message: 'Por favor, seleccione un tipo de vino',
-              },
+                message: 'Por favor, seleccione un tipo de vino'
+              }
             ]}
           >
             <Select onChange={handleChangeType}>
@@ -212,8 +212,8 @@ export const WineForm = ({
             rules={[
               {
                 required: true,
-                message: 'Por favor, seleccione una cepa',
-              },
+                message: 'Por favor, seleccione una cepa'
+              }
             ]}
           >
             <Select onChange={handleChangeVariety} value={subList}>
@@ -232,8 +232,8 @@ export const WineForm = ({
             rules={[
               {
                 required: true,
-                message: 'Por favor, ingrese el origen del vino',
-              },
+                message: 'Por favor, ingrese el origen del vino'
+              }
             ]}
           >
             <Input placeholder='Valle de Colchagua, Chile' />
@@ -247,8 +247,8 @@ export const WineForm = ({
                 {
                   type: 'number',
                   required: true,
-                  message: 'Por favor, ingrese capacidad de la botella en ml',
-                },
+                  message: 'Por favor, ingrese capacidad de la botella en ml'
+                }
               ]}
             >
               <InputNumber min={180} max={16000} placeholder='750' />
@@ -264,8 +264,8 @@ export const WineForm = ({
                 {
                   type: 'number',
                   required: true,
-                  message: 'Por favor, ingrese los grados alcohólicos del vino',
-                },
+                  message: 'Por favor, ingrese los grados alcohólicos del vino'
+                }
               ]}
             >
               <InputNumber min={0} max={45} placeholder='14.5' />
@@ -280,8 +280,8 @@ export const WineForm = ({
                 {
                   type: 'number',
                   required: true,
-                  message: 'Por favor, ingrese el año de la cosecha',
-                },
+                  message: 'Por favor, ingrese el año de la cosecha'
+                }
               ]}
             >
               <InputNumber min={1950} max={2100} placeholder='2020' />
@@ -295,8 +295,8 @@ export const WineForm = ({
               {
                 type: 'string',
                 required: true,
-                message: 'Por favor, ingrese la clasificación del vino',
-              },
+                message: 'Por favor, ingrese la clasificación del vino'
+              }
             ]}
           >
             <Input placeholder='Reserva, Gran Reserva, Single Block...' />
@@ -308,18 +308,18 @@ export const WineForm = ({
             rules={[
               {
                 required: true,
-                message: 'Debe indicar un puntaje',
+                message: 'Debe indicar un puntaje'
               },
               {
                 validator: (_, value) => {
                   if (value > 0) {
-                    return Promise.resolve();
+                    return Promise.resolve()
                   }
                   return Promise.reject(
                     new Error('El puntaje no puede ser cero')
-                  );
-                },
-              },
+                  )
+                }
+              }
             ]}
           >
             <Rate allowHalf />
@@ -333,17 +333,17 @@ export const WineForm = ({
                 {
                   type: 'number',
                   required: true,
-                  message: 'Por favor, ingrese el precio del vino',
-                },
+                  message: 'Por favor, ingrese el precio del vino'
+                }
               ]}
             >
               <InputNumber
                 min={1000}
                 placeholder='4.990'
-                formatter={(value) =>
+                formatter={value =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
                 }
-                parser={(value) => value.replace(/\./g, '')}
+                parser={value => value.replace(/\./g, '')}
               />
             </Form.Item>
             <span className='ant-form-text ms-1'>CLP$</span>
@@ -419,7 +419,7 @@ export const WineForm = ({
           <Form.Item
             wrapperCol={{
               span: 12,
-              offset: 6,
+              offset: 6
             }}
           >
             <Button type='primary' htmlType='submit'>
@@ -429,5 +429,5 @@ export const WineForm = ({
         </Form>
       </Col>
     </Row>
-  );
-};
+  )
+}

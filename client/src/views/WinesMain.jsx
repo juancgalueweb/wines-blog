@@ -1,108 +1,108 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Badge, Button, Image, Modal, Rate, Table } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { UserContext } from '../contexts/UserContext';
-import { axiosWithToken } from '../helpers/axios';
-import { thousandSeparator } from '../helpers/thousandSeparator';
-import { uniqueArrayData } from '../helpers/uniqueArrayData';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { Badge, Button, Image, Modal, Rate, Table } from 'antd'
+import React, { useContext, useEffect, useState } from 'react'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import { UserContext } from '../contexts/UserContext'
+import { axiosWithToken } from '../helpers/axios'
+import { thousandSeparator } from '../helpers/thousandSeparator'
+import { uniqueArrayData } from '../helpers/uniqueArrayData'
 
 export const WinesMain = () => {
-  const [wines, setWines] = useState([]);
-  const [loaded, setLoaded] = useState(false);
-  const { user, setUser } = useContext(UserContext);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(8);
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [wines, setWines] = useState([])
+  const [loaded, setLoaded] = useState(false)
+  const { user, setUser } = useContext(UserContext)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(8)
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
 
   const getWinesByUser = async () => {
     try {
-      const winesData = await axiosWithToken(`wines/${user._id}`);
-      const promises = winesData.data.map(async (row) => {
-        let response;
+      const winesData = await axiosWithToken(`wines/${user._id}`)
+      const promises = winesData.data.map(async row => {
+        let response
         if (row.imageUrl !== '') {
-          response = await axiosWithToken(`getFile/${row.imageUrl}`);
+          response = await axiosWithToken(`getFile/${row.imageUrl}`)
           return {
             ...row,
             imageUrl: response.data.imageUrl,
-            key: row._id.toString(),
-          };
+            key: row._id.toString()
+          }
         } else {
-          return { ...row, key: row._id.toString() };
+          return { ...row, key: row._id.toString() }
         }
-      });
-      const result = await Promise.all(promises);
-      setWines(result);
-      setLoaded(true);
-      setLoading(false);
+      })
+      const result = await Promise.all(promises)
+      setWines(result)
+      setLoaded(true)
+      setLoading(false)
     } catch (err) {
       Swal.fire({
         icon: 'error',
         title: `${err.response.data.msg}`,
         showConfirmButton: false,
-        timer: 2000,
-      });
+        timer: 2000
+      })
       setTimeout(() => {
-        handleLogOut();
-      }, 2100);
+        handleLogOut()
+      }, 2100)
     }
-  };
+  }
 
   //Borrar un vino
-  const deleteWine = (record) => {
+  const deleteWine = record => {
     const executeDelete = async () => {
       try {
-        await axiosWithToken(`wine/delete/${record._id}`, {}, 'DELETE');
-        setWines(wines.filter((wine) => wine._id !== record._id));
+        await axiosWithToken(`wine/delete/${record._id}`, {}, 'DELETE')
+        setWines(wines.filter(wine => wine._id !== record._id))
       } catch (err) {
         Swal.fire({
           icon: 'error',
           title: `${err.response.data.msg}`,
           showConfirmButton: false,
-          timer: 2000,
-        });
+          timer: 2000
+        })
         setTimeout(() => {
-          handleLogOut();
-        }, 2100);
+          handleLogOut()
+        }, 2100)
       }
-    };
+    }
 
     Modal.confirm({
       title: `¿Seguero que quiere borrar el vino ${record.brand} ${record.type} ${record.variety}?`,
       okText: 'Yes',
       okType: 'danger',
       onOk: () => {
-        executeDelete();
-      },
-    });
-  };
+        executeDelete()
+      }
+    })
+  }
 
   useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate('/login')
     }
-  }, [user, navigate]);
+  }, [user, navigate])
 
   useEffect(() => {
     if (user) {
-      getWinesByUser();
+      getWinesByUser()
     } else {
-      return;
+      return
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleLogOut = () => {
-    setUser(null);
-    localStorage.clear();
-    navigate('/login');
-  };
+    setUser(null)
+    localStorage.clear()
+    navigate('/login')
+  }
 
-  const tableProps = { loading };
+  const tableProps = { loading }
 
   //Definiendo las columnas de la tabla de Ant Design
   const columns = [
@@ -110,83 +110,83 @@ export const WinesMain = () => {
       key: '1',
       title: 'Marca',
       dataIndex: 'brand',
-      filters: uniqueArrayData(wines, 'brand').map((brand) => ({
+      filters: uniqueArrayData(wines, 'brand').map(brand => ({
         text: brand,
-        value: brand,
+        value: brand
       })),
-      onFilter: (value, record) => record.brand.indexOf(value) === 0,
+      onFilter: (value, record) => record.brand.indexOf(value) === 0
     },
     {
       key: '2',
       title: 'Tipo',
       dataIndex: 'type',
-      filters: uniqueArrayData(wines, 'type').map((wineType) => ({
+      filters: uniqueArrayData(wines, 'type').map(wineType => ({
         text: wineType,
-        value: wineType,
+        value: wineType
       })),
       onFilter: (value, record) => record.type.indexOf(value) === 0,
-      render: (record) => {
+      render: record => {
         return (
           <span style={{ textAlign: 'center' }}>
             {record === 'LateHarvest' ? 'Late Harvest' : record}
           </span>
-        );
-      },
+        )
+      }
     },
     {
       key: '3',
       title: 'Cepa',
       dataIndex: 'variety',
-      filters: uniqueArrayData(wines, 'variety').map((wineCepa) => ({
+      filters: uniqueArrayData(wines, 'variety').map(wineCepa => ({
         text: wineCepa,
-        value: wineCepa,
+        value: wineCepa
       })),
-      onFilter: (value, record) => record.variety.indexOf(value) === 0,
+      onFilter: (value, record) => record.variety.indexOf(value) === 0
     },
     {
       key: '4',
       title: 'Origen',
       dataIndex: 'origin',
-      filters: uniqueArrayData(wines, 'origin').map((origin) => ({
+      filters: uniqueArrayData(wines, 'origin').map(origin => ({
         text: origin,
-        value: origin,
+        value: origin
       })),
-      onFilter: (value, record) => record.origin.indexOf(value) === 0,
+      onFilter: (value, record) => record.origin.indexOf(value) === 0
     },
     {
       key: '5',
       title: 'Botella (ml)',
       dataIndex: 'bottleCapacity',
       sorter: (a, b) => a.bottleCapacity - b.bottleCapacity,
-      render: (record) => {
+      render: record => {
         return (
           <span style={{ textAlign: 'right', display: 'block' }}>
             {thousandSeparator(record)}
           </span>
-        );
-      },
+        )
+      }
     },
     {
       key: '6',
       title: 'alc.',
       dataIndex: 'alcoholicStrength',
-      sorter: (a, b) => a.alcoholicStrength - b.alcoholicStrength,
+      sorter: (a, b) => a.alcoholicStrength - b.alcoholicStrength
     },
     {
       key: '7',
       title: 'Año',
       dataIndex: 'year',
-      sorter: (a, b) => a.year - b.year,
+      sorter: (a, b) => a.year - b.year
     },
     {
       key: '8',
       title: 'Clasif.',
       dataIndex: 'classification',
-      filters: uniqueArrayData(wines, 'classification').map((classif) => ({
+      filters: uniqueArrayData(wines, 'classification').map(classif => ({
         text: classif,
-        value: classif,
+        value: classif
       })),
-      onFilter: (value, record) => record.classification.indexOf(value) === 0,
+      onFilter: (value, record) => record.classification.indexOf(value) === 0
     },
     {
       key: '9',
@@ -196,45 +196,44 @@ export const WinesMain = () => {
       align: 'center',
       filters: uniqueArrayData(wines, 'rating')
         .sort((a, b) => b - a)
-        .map((rate) => ({
+        .map(rate => ({
           text: <Rate allowHalf disabled defaultValue={rate} />,
-          value: rate,
+          value: rate
         })),
       onFilter: (value, record) =>
         record.rating.toString().indexOf(value.toString()) === 0,
       sorter: (a, b) => a.rating - b.rating,
-      render: (record) => {
-        return <Rate allowHalf disabled defaultValue={record} />;
-      },
+      render: record => {
+        return <Rate allowHalf disabled defaultValue={record} />
+      }
     },
     {
       key: '10',
       title: 'Precio (CLP)',
       dataIndex: 'price',
       sorter: (a, b) => a.price - b.price,
-      render: (record) => {
+      render: record => {
         return (
           <span style={{ textAlign: 'right', display: 'block' }}>
             {thousandSeparator(record)}
           </span>
-        );
-      },
+        )
+      }
     },
     {
       key: '11',
       title: 'Img',
       dataIndex: 'imageUrl',
-      render: (record) => {
+      render: record => {
         return (
           <Image width={30} src={!record ? 'images/no-image.png' : record} />
-        );
-      },
+        )
+      }
     },
     {
       key: '12',
       title: 'Acciones',
-      width: 50,
-      render: (record) => {
+      render: record => {
         return (
           <>
             <EditOutlined
@@ -242,16 +241,16 @@ export const WinesMain = () => {
               onClick={() => navigate(`/vino/${record._id}`)}
             />
             <DeleteOutlined
-              style={{ color: '#E63F32', marginLeft: 16, fontSize: 18 }}
+              style={{ color: '#E63F32', marginLeft: 5, fontSize: 18 }}
               onClick={() => {
-                deleteWine(record);
+                deleteWine(record)
               }}
             />
           </>
-        );
-      },
-    },
-  ];
+        )
+      }
+    }
+  ]
 
   return (
     <>
@@ -308,9 +307,9 @@ export const WinesMain = () => {
                     current: page,
                     pageSize: pageSize,
                     onChange: (page, pageSize) => {
-                      setPage(page);
-                      setPageSize(pageSize);
-                    },
+                      setPage(page)
+                      setPageSize(pageSize)
+                    }
                   }}
                 />
               </>
@@ -320,5 +319,5 @@ export const WinesMain = () => {
       </Container>
       <br />
     </>
-  );
-};
+  )
+}

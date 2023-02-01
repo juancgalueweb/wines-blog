@@ -2,29 +2,29 @@ import {
   faHouseChimney,
   faRightToBracket,
   faUserPlus,
-  faWineGlass,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext } from 'react';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import { useNavigate } from 'react-router-dom';
-import { LoginContext } from '../contexts/LoginContext';
+  faWineGlass
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useContext } from 'react'
+import Container from 'react-bootstrap/Container'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
+import { useNavigate } from 'react-router-dom'
+import { LoginContext } from '../contexts/LoginContext'
 
 export const Header = () => {
-  const navigate = useNavigate();
-  const { setIsLogin } = useContext(LoginContext);
+  const navigate = useNavigate()
+  const { setIsLogin } = useContext(LoginContext)
 
   const handleRegister = () => {
-    setIsLogin(false);
-    navigate('/register');
-  };
+    setIsLogin(false)
+    navigate('/register')
+  }
 
   const handleLogin = () => {
-    setIsLogin(true);
-    navigate('/login');
-  };
+    setIsLogin(true)
+    navigate('/login')
+  }
 
   return (
     <Navbar collapseOnSelect bg='light' expand='lg' fixed='top'>
@@ -64,5 +64,5 @@ export const Header = () => {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  );
-};
+  )
+}

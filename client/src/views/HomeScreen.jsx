@@ -1,15 +1,15 @@
-import { Card, Carousel, Col, Layout, Row } from 'antd';
-import React from 'react';
-import { Footer } from '../components/Footer';
+import { Card, Carousel, Col, Layout, Row } from 'antd'
+import React from 'react'
+import { Footer } from '../components/Footer'
 
-const { Content } = Layout;
+const { Content } = Layout
 
 const images = [
   { imageUrl: 'images/carrusel1.jpeg', alt: 'Carrusel uno' },
   { imageUrl: 'images/carrusel2.jpg', alt: 'Carrusel dos' },
   { imageUrl: 'images/carrusel3.jpg', alt: 'Carrusel tres' },
-  { imageUrl: 'images/carrusel4.jpg', alt: 'Carrusel cuatro' },
-];
+  { imageUrl: 'images/carrusel4.jpg', alt: 'Carrusel cuatro' }
+]
 
 export const HomeScreen = () => {
   return (
@@ -25,7 +25,7 @@ export const HomeScreen = () => {
         </Content>
       </Layout>
       <Carousel autoplay effect='fade' pauseOnHover={false}>
-        {images.map((image) => (
+        {images.map(image => (
           <div key={image.alt}>
             <img
               src={image.imageUrl}
@@ -83,5 +83,5 @@ export const HomeScreen = () => {
       <br />
       <Footer />
     </>
-  );
-};
+  )
+}

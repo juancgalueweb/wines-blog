@@ -1,3 +1,3 @@
-export const thousandSeparator = (number) => {
-  return number.toLocaleString("es-CL");
-};
+export const thousandSeparator = number => {
+  return number.toLocaleString('es-CL')
+}
