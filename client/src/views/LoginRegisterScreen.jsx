@@ -1,4 +1,4 @@
-import { Button, Col, Row } from 'antd'
+import { Col, Row } from 'antd'
 import React, { useContext, useEffect } from 'react'
 import Container from 'react-bootstrap/Container'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -12,16 +12,6 @@ export const LoginRegisterScreen = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const handleOnClick = () => {
-    if (isLogin) {
-      setIsLogin(false)
-      navigate('/register')
-    } else {
-      setIsLogin(true)
-      navigate('/login')
-    }
-  }
-
   useEffect(() => {
     if (user) {
       navigate('/mis-vinos')
@@ -33,7 +23,7 @@ export const LoginRegisterScreen = () => {
     <Container className='m-3 mx-auto'>
       <Row>
         <Col
-          xs={23}
+          xs={22}
           xl={14}
           className='border rounded bg-light mx-auto pb-2 pt-4'
         >
@@ -46,9 +36,6 @@ export const LoginRegisterScreen = () => {
             isLogin={isLogin}
             titleSubmitButton={isLogin ? 'Login' : 'Registro'}
           />
-          <Button onClick={handleOnClick} className='styled-button'>
-            Ir al {isLogin ? 'registro' : 'login'}
-          </Button>
         </Col>
       </Row>
     </Container>

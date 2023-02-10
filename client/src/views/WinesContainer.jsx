@@ -167,22 +167,18 @@ export const WinesContainer = () => {
       <Row>
         <Col>
           <p className='text-end'>Hola, {user?.fullName}</p>
-          <Button
-            type='primary'
-            danger
-            className='float-end'
-            onClick={handleLogOut}
-          >
-            Cerrar sesión
-          </Button>
-          <br />
-          <Button
-            type='primary'
-            className='d-block'
-            onClick={() => navigate('/mis-vinos')}
-          >
-            Mis vinos
-          </Button>
+          <div className='d-flex justify-content-between'>
+            <Button
+              type='primary'
+              className='d-block'
+              onClick={() => navigate('/mis-vinos')}
+            >
+              Mis vinos
+            </Button>
+            <Button type='primary' danger onClick={handleLogOut}>
+              Cerrar sesión
+            </Button>
+          </div>
         </Col>
       </Row>
       <Row>

@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Form, Input, Row } from 'antd'
+import { Button, Checkbox, Col, Form, Input } from 'antd'
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -99,136 +99,148 @@ export const UserFormAntd = props => {
     }
   }
 
+  const handleOnClick = () => {
+    if (isLogin) {
+      setIsLogin(false)
+      navigate('/register')
+    } else {
+      setIsLogin(true)
+      navigate('/login')
+    }
+  }
+
   return (
-    <Row>
-      <Col span={14} className='mx-auto pb-2 pt-4'>
-        <Form
-          form={form}
-          {...formItemLayout}
-          onFinish={isLogin ? loginUser : registerUser}
-          initialValues={{
-            fullName: '',
-            email: '',
-            password: '',
-            passwordConfirmation: '',
-            isAdult: false
-          }}
-          // onFinishFailed={onFinishFailed}
-        >
-          {!isLogin ? (
-            <Form.Item
-              label='Nombre completo'
-              name='fullName'
-              rules={[
-                {
-                  type: 'string',
-                  required: true,
-                  message: 'Por favor, ingrese su nombre y apellido'
-                },
-                { min: 5, message: 'Mínimo 5 caracteres' }
-              ]}
-            >
-              <Input placeholder='Nombre completo' />
-            </Form.Item>
-          ) : null}
-
+    <Col span={14} className='mx-auto pb-2 pt-4'>
+      <Form
+        form={form}
+        {...formItemLayout}
+        onFinish={isLogin ? loginUser : registerUser}
+        initialValues={{
+          fullName: '',
+          email: '',
+          password: '',
+          passwordConfirmation: '',
+          isAdult: false
+        }}
+        // onFinishFailed={onFinishFailed}
+      >
+        {!isLogin ? (
           <Form.Item
-            label='Correo electrónico'
-            name='email'
+            label='Nombre completo'
+            name='fullName'
             rules={[
               {
-                type: 'email',
+                type: 'string',
                 required: true,
-                message: 'Por favor, ingrese un email válido'
-              }
-            ]}
-          >
-            {isLogin ? (
-              <Input
-                prefix={<UserOutlined className='site-form-item-icon' />}
-                placeholder='correo@dominio.com'
-              />
-            ) : (
-              <Input placeholder='correo@dominio.com' />
-            )}
-          </Form.Item>
-
-          <Form.Item
-            label='Contraseña'
-            name='password'
-            rules={[
-              {
-                required: true,
-                message: 'Por favor, ingrese su contraseña'
+                message: 'Por favor, ingrese su nombre y apellido'
               },
-              { min: 6, message: 'Mínimo 6 caracteres' }
+              { min: 5, message: 'Mínimo 5 caracteres' }
             ]}
-            hasFeedback
           >
-            {isLogin ? (
-              <Input.Password
-                prefix={<LockOutlined className='site-form-item-icon' />}
-              />
-            ) : (
-              <Input.Password />
-            )}
+            <Input placeholder='Nombre completo' />
           </Form.Item>
+        ) : null}
 
-          {!isLogin ? (
+        <Form.Item
+          label='Correo electrónico'
+          name='email'
+          rules={[
+            {
+              type: 'email',
+              required: true,
+              message: 'Por favor, ingrese un email válido'
+            }
+          ]}
+        >
+          {isLogin ? (
+            <Input
+              prefix={<UserOutlined className='site-form-item-icon' />}
+              placeholder='correo@dominio.com'
+            />
+          ) : (
+            <Input placeholder='correo@dominio.com' />
+          )}
+        </Form.Item>
+
+        <Form.Item
+          label='Contraseña'
+          name='password'
+          rules={[
+            {
+              required: true,
+              message: 'Por favor, ingrese su contraseña'
+            },
+            { min: 6, message: 'Mínimo 6 caracteres' }
+          ]}
+          hasFeedback
+        >
+          {isLogin ? (
+            <Input.Password
+              prefix={<LockOutlined className='site-form-item-icon' />}
+            />
+          ) : (
+            <Input.Password />
+          )}
+        </Form.Item>
+
+        {!isLogin ? (
+          <Form.Item
+            name='passwordConfirmation'
+            label='Confirmar contraseña'
+            dependencies={['password']}
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: 'Por favor, confirme su contraseña'
+              },
+              ({ getFieldValue }) => ({
+                validator (_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve()
+                  }
+
+                  return Promise.reject(
+                    new Error('Las contraseñas ingresadas no coinciden')
+                  )
+                }
+              })
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+        ) : null}
+
+        {!isLogin ? (
+          <>
             <Form.Item
-              name='passwordConfirmation'
-              label='Confirmar contraseña'
-              dependencies={['password']}
-              hasFeedback
+              name='isAdult'
+              valuePropName='checked'
               rules={[
                 {
-                  required: true,
-                  message: 'Por favor, confirme su contraseña'
-                },
-                ({ getFieldValue }) => ({
-                  validator (_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve()
-                    }
-
-                    return Promise.reject(
-                      new Error('Las contraseñas ingresadas no coinciden')
-                    )
-                  }
-                })
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(
+                          new Error('Debe ser mayor de edad para registrarse')
+                        )
+                }
               ]}
+              {...tailFormItemLayout}
             >
-              <Input.Password />
+              <Checkbox>Soy mayor de edad</Checkbox>
             </Form.Item>
-          ) : null}
-
-          {!isLogin ? (
-            <>
-              <Form.Item
-                name='isAdult'
-                valuePropName='checked'
-                rules={[
-                  {
-                    validator: (_, value) =>
-                      value
-                        ? Promise.resolve()
-                        : Promise.reject(
-                            new Error('Debe ser mayor de edad para registrarse')
-                          )
-                  }
-                ]}
-                {...tailFormItemLayout}
-              >
-                <Checkbox>Soy mayor de edad</Checkbox>
-              </Form.Item>
-            </>
-          ) : null}
-
+          </>
+        ) : null}
+        <div className='d-flex justify-content-between align-items-center'>
           <Button type='primary' htmlType='submit'>
             {titleSubmitButton}
           </Button>
-        </Form>
-      </Col>
-    </Row>
+          <Button onClick={handleOnClick}>
+            Ir al {isLogin ? 'registro' : 'login'}
+          </Button>
+        </div>
+      </Form>
+    </Col>
   )
 }
