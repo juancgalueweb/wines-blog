@@ -1,5 +1,5 @@
 # First stage
-FROM node:gallium-bullseye AS builder
+FROM node:iron-slim AS builder
 
 RUN npm i -g pnpm
 
@@ -17,7 +17,6 @@ ENV VITE_BASE_URL=${BASE_URL}
 RUN pnpm build
 
 # Second stage
-# FROM caddy:2.1.1
 FROM caddy:2.6.2-alpine
 
 ARG CADDYFILE

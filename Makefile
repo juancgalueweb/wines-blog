@@ -3,7 +3,7 @@ build-dev:
 	cd server && $(MAKE) build-be
 
 run-dev:
-	docker-compose -f docker-compose-dev.yml up
+	docker compose -f docker-compose-dev.yml up
 
 # Production configuration
 build-local:
@@ -11,7 +11,7 @@ build-local:
 	cd server && $(MAKE) build-be
 
 run-local:
-	ENV=local docker-compose -f docker-compose-production.yml up
+	ENV=local docker compose -f docker-compose-production.yml up
 
 # Running the caddy web server and using the Mongo DB Atlas database. Also, running on Digital Ocean VM
 build-production:
@@ -19,7 +19,7 @@ build-production:
 	cd server && $(MAKE) build-be
 
 run-production:
-	ENV=production docker-compose -f docker-compose-production.yml up
+	ENV=production docker compose -f docker-compose-production.yml up
 
 #Linode VM
 SSH_STRING:=root@66.228.58.174

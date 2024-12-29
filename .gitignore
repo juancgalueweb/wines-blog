@@ -18,6 +18,8 @@ client/.env.production
 server/config/.env.dev
 server/config/.env.local
 server/config/.env.production
+client/pnpm-lock.yaml
+server/pnpm-lock.yaml
 
 npm-debug.log*
 yarn-debug.log*

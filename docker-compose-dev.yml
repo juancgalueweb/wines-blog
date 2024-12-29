@@ -1,11 +1,12 @@
-version: "3"
 services:
   react-app:
     image: react-app-dev
-    build: ./client/
+    build:
+      context: ./client/
+      dockerfile: Dockerfile.dev
     stdin_open: true
     ports:
-      - "3000:3000"
+      - '3000:3000'
     networks:
       - mern-app
     volumes:
@@ -13,10 +14,12 @@ services:
       - /usr/src/app/node_modules
   api-server:
     image: api-server
-    build: ./server/
+    build:
+      context: ./server/
+      dockerfile: Dockerfile
     env_file: ./server/config/.env.dev
     ports:
-      - "8000:8000"
+      - '8000:8000'
     networks:
       - mern-app
     volumes:
@@ -25,11 +28,11 @@ services:
     depends_on:
       - mongo
   mongo:
-  # I had to use this mongo image because my Mac OS runs on M1 chip, if you have a Linux or Intel compatible chip, you can use a normal mongo image
-    image: arm64v8/mongo:4.4-focal
-#To connect to mongo database using MongoDB Compass UI, use: mongodb://localhost:27020
+    # I had to use this mongo image because my Mac OS runs on M1 chip, if you have a Linux or Intel compatible chip, you can use a normal mongo image
+    image: arm64v8/mongo:8.0.4
+    #To connect to mongo database using MongoDB Compass UI, use: mongodb://localhost:27020
     ports:
-      - "27020:27017"
+      - '27020:27017'
     networks:
       - mern-app
     volumes:
